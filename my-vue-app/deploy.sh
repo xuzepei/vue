@@ -19,7 +19,7 @@ fi
 git checkout gh-pages
 
 # 拷贝 dist 文件夹内容到当前目录
-cp -r dist/* .
+cp -r dist/* ../
 
 # 部署到自定义域域名
 # echo 'www.example.com' > CNAME
