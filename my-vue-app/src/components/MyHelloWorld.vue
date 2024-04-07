@@ -13,6 +13,8 @@
         <div class="title-div" v-pre>3. v-bind 和 :</div>
         <hr>
         <img :src="adsImagePath" width="100" height="100">
+        <button :disabled="isBtnDisabled">Button</button>
+        <div v-bind="objectOfAttrs"></div>
 
         <div class="title-div" v-pre>4. v-for</div>
         <hr>
@@ -44,7 +46,7 @@
         <hr>
         <div>
             <p>Using text interpolation: {{ rawHtml }}</p>
-            <p>Using v-html directive: <span v-html="rawHtml">This should be red.</span></p>
+            <p v-html="rawHtml"></p>
         </div>
     </div>
 </template>
@@ -91,7 +93,12 @@ export default {
             {id: 3, name: "item3"}],
             question: '',
             answer: 'I cannot give you an answer until you ask a question!',
-            rawHtml: '<span style="color: red">This should be red.</span>'
+            rawHtml: '<span style="color:red">This will replace the existing content.</span>',
+            isBtnDisabled: true,
+            objectOfAttrs: {
+                id: 'container',
+                class: 'wrapper'
+            }
         };
     },
     computed: {
