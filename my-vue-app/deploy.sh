@@ -24,19 +24,19 @@ git push -u origin
 git checkout gh-pages
 
 # 拷贝 dist 文件夹内容到当前目录
-cp -r dist/* ../
+#cp -r dist/* ../
 
 # 部署到自定义域域名
 # echo 'www.example.com' > CNAME
 
 #git init
-git add -A
+git add dist/*
 git commit -m 'deploy'
 
 # 部署到 https://<USERNAME>.github.io
 #git push -f git@github.com:xuzepei/xuzepei.github.io.git master
 
-cd -
+#cd -
 
 # 部署到 https://<USERNAME>.github.io/<REPO>
 git push -f git@github.com:xuzepei/VuePractice.git origin:gh-pages
