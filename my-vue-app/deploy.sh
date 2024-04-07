@@ -12,6 +12,11 @@ if [ ! -d "dist" ]; then
   exit 1
 fi
 
+# 先提交当前的改动
+git add -A
+git commit -m 'deploy'
+git push -u origin
+
 # cd 到构建输出的目录下
 #cd dist
 
