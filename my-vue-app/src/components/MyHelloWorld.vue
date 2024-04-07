@@ -39,6 +39,13 @@
             <p>你的问题: {{ question }}</p>
             <p>答案: {{ answer }}</p>
         </div>
+
+        <div class="title-div" v-pre>8. v-html</div>
+        <hr>
+        <div>
+            <p>Using text interpolation: {{ rawHtml }}</p>
+            <p>Using v-html directive: <span v-html="rawHtml">This should be red.</span></p>
+        </div>
     </div>
 </template>
 
@@ -83,7 +90,8 @@ export default {
             {id: 2, name: "item2"},
             {id: 3, name: "item3"}],
             question: '',
-            answer: 'I cannot give you an answer until you ask a question!'
+            answer: 'I cannot give you an answer until you ask a question!',
+            rawHtml: '<span style="color: red">This should be red.</span>'
         };
     },
     computed: {
