@@ -54,7 +54,7 @@ div {
     font-size: 20px;
     font-weight: bold;
     text-align: left;
-    color: pink;
+    color:red;
 }
 
 /* ul {

@@ -13,33 +13,33 @@ if [ ! -d "dist" ]; then
 fi
 
 # 先提交当前的改动
-git add -A
-git commit -m 'deploy'
-git push -u origin
+# git add -A
+# git commit -m 'deploy'
+# git push -u origin
 
-# cd 到构建输出的目录下
-#cd dist
+# 拷贝 dist 文件夹内容到分支目录
+cp -r dist/* ~/vue-gh-pages/
+
+# cd 到分支目录下
+cd ~/vue-gh-pages/
 
 # 切换到 gh-pages 分支
-git checkout gh-pages
+#git checkout gh-pages
 
-# 拷贝 dist 文件夹内容到当前目录
-cp -r dist/* ../
+
 
 # 部署到自定义域域名
 # echo 'www.example.com' > CNAME
 
 #git init
+#git remote add origin git@github.com:xuzepei/VuePractice.git
 git add -A
 git commit -m 'deploy'
 
 # 部署到 https://<USERNAME>.github.io
 #git push -f git@github.com:xuzepei/xuzepei.github.io.git master
 
-#cd -
-
 # 部署到 https://<USERNAME>.github.io/<REPO>
-git push -f git@github.com:xuzepei/VuePractice.git origin:gh-pages
+git pull origin gh-pages
+git push -u origin gh-pages
 
-# 切回主分支
-git checkout main
