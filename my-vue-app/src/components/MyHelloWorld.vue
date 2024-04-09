@@ -13,8 +13,11 @@
         <div class="title-div" v-pre>3. v-bind 和 :</div>
         <hr>
         <img :src="adsImagePath" width="100" height="100">
+        <!-- <img src="../assets/test.png" width="100" height="100"> -->
         <button :disabled="isBtnDisabled">Button</button>
         <div v-bind="objectOfAttrs"></div>
+        <p :class="isDynamicClass">这是个动态class</p>
+        <p :style="{ color: dynaimcColor }">这是个动态style</p>
 
         <div class="title-div" v-pre>4. v-for</div>
         <hr>
@@ -26,6 +29,11 @@
         <hr>
         <button @click="changeMsg">改变消息</button>
         <button @click="handleClick">点击我</button>
+
+        <p>事件对象</p>
+        <a @click="clickedToGo" href="http://www.baidu.com">阻止百度</a>
+        <br>
+        <a @click="clickedToGo2(2, $event)" href="http://www.baidu.com">阻止去百度</a>
 
         <div class="title-div" v-pre>6. 计算属性computed</div>
         <hr>
@@ -47,6 +55,17 @@
         <div>
             <p>Using text interpolation: {{ rawHtml }}</p>
             <p v-html="rawHtml"></p>
+        </div>
+        <div class="title-div" v-pre>9. 事件修饰符</div>
+        <hr>
+        <div>
+            <div @click="fatherClick">父节点
+                <button @click.stop="stopClick">.stop阻止事件冒泡</button>
+                <a href="http://www.baidu.com" @click.prevent="stopClick">.prevent阻止默认行为</a>
+                <button @click.once="onceClick" @click.stop="">.once程序运行期间, 只触发一次事件处理函数</button>
+                <input type="text" @keydown.enter="enterFun" @keydown.esc="escFun"/>
+                <input type="text" @keydown.esc="escFun" />
+            </div>
         </div>
     </div>
 </template>
@@ -75,10 +94,15 @@ li {
     line-height: 2;
 }
 
+.green_class {
+    color: green;
+}
+
 </style>
 
 <script>
 // import HelloWorld from './HelloWorld.vue';
+import testImagePath from '../assets/ads.jpg';
 
 export default {
     data() {
@@ -86,7 +110,7 @@ export default {
             msg: "Hello, Vue!",
             name: "Vue",
             isShow: true,
-            adsImagePath: './test.png',
+            adsImagePath: testImagePath,
             items: [
             {id: 1, name: "item1"},
             {id: 2, name: "item2"},
@@ -98,7 +122,11 @@ export default {
             objectOfAttrs: {
                 id: 'container',
                 class: 'wrapper'
-            }
+            },
+            isDynamicClass: {
+                green_class: true
+            },
+            dynaimcColor: "orange"
         };
     },
     computed: {
@@ -131,6 +159,38 @@ export default {
 
         getAnswer() {
             this.answer = 'Yes, it is and this is my answer.';
+        },
+
+        clickedToGo(e) {
+            e.preventDefault();
+        },
+
+        clickedToGo2(id, e) {
+            //console.log(id);
+            //console.log(e);
+            e.preventDefault();
+        },
+
+        fatherClick() {
+            console.log("fatherClick");
+        },
+
+        stopClick(e) {
+            console.log("stopClick");
+
+            e.preventDefault();
+        },
+
+        onceClick() {
+            console.log("onceClick");
+        },
+
+        enterFun() {
+            console.log("enterFun");
+        },
+
+        escFun() {
+            console.log("escFun");
         }
     }
 };
