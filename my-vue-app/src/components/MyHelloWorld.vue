@@ -24,6 +24,14 @@
         <ul>
             <li v-for="item in items" :key="item.id">{{ item.name }}</li>
         </ul>
+        <div class="v-for-row">
+            <span class="v-for-row-item" v-for="(value, index) in items2" :key="index">{{ value }}</span>
+        </div>
+        <div class="v-for-buttons">
+            <button @click="clickedReverseBtn">Reverse</button>
+            <button @click="clickedSliceBtn">Slice</button>
+            <button @click="clickedChangeBtn">{{isChanged ? "a to i" : "i to a"}}</button>
+        </div>
 
         <div class="title-div" v-pre>5. v-on 和 @</div>
         <hr>
@@ -50,10 +58,11 @@
             <p>答案: {{ answer }}</p>
         </div>
 
-        <div class="title-div" v-pre>8. v-html</div>
+        <div class="title-div" v-pre>8. v-text和v-html</div>
         <hr>
         <div>
             <p>Using text interpolation: {{ rawHtml }}</p>
+            <p v-text="rawHtml"></p>
             <p v-html="rawHtml"></p>
         </div>
         <div class="title-div" v-pre>9. 事件修饰符</div>
@@ -66,6 +75,48 @@
                 <input type="text" @keydown.enter="enterFun" @keydown.esc="escFun"/>
                 <input type="text" @keydown.esc="escFun" />
             </div>
+        </div>
+        <div class="title-div" v-pre>10. v-model数据的双向绑定</div>
+        <hr>
+        <div>
+            <span>用户名: </span>
+            <input type="text" v-model="username" />
+        </div>
+        <div>
+            <span>密码: </span>
+            <input type="password" v-model="password" />
+        </div>
+        <div>
+            <span>爱好: </span>
+            <input type="checkbox" v-model="hobbies" value="workout" />健身
+            <input type="checkbox" v-model="hobbies" value="reading" />看书
+            <input type="checkbox" v-model="hobbies" value="game" />游戏
+        </div>
+        <div>
+            <span>性别: </span>
+            <input type="radio" v-model="gender" value="male" />男
+            <input type="radio" v-model="gender" value="female" />女
+        </div>
+        <div>
+            <span>点赞数量: </span>
+            <input type="text" v-model.number="praize"/>{{ praize }}
+        </div>
+        <div>
+            <span>评论: </span>
+            <input type="text" v-model.trim="comment"/>
+        </div>
+
+        <div class="title-div" v-pre>11. 计算属性用法</div>
+        <hr>
+        <div>
+            <span>全选：</span>
+            <input type="checkbox" v-model="selectAll"/>
+            <ul>
+                <li v-for="(val, index) in selectionArray" :key="index">
+                    <input type="checkbox" v-model="val.selected"/>
+                    <span>{{ val.name }}</span>
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -98,6 +149,23 @@ li {
     color: green;
 }
 
+.v-for-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.v-for-row-item {
+  font-size: 32px;
+  font-weight: bold;
+  margin-right: 10px;
+  background-color: pink;
+}
+
+.v-for-buttons button {
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
 </style>
 
 <script>
@@ -115,6 +183,7 @@ export default {
             {id: 1, name: "item1"},
             {id: 2, name: "item2"},
             {id: 3, name: "item3"}],
+            items2: ["c", "o", "d", "e", "i", "s", "w", "o", "r", "l", "d"],
             question: '',
             answer: 'I cannot give you an answer until you ask a question!',
             rawHtml: '<span style="color:red">This will replace the existing content.</span>',
@@ -126,7 +195,16 @@ export default {
             isDynamicClass: {
                 green_class: true
             },
-            dynaimcColor: "orange"
+            dynaimcColor: "orange",
+            username: "",
+            password: "",
+            hobbies: [],
+            gender: "",
+            praize: 0,
+            comment: "",
+            isSliced: false,
+            isChanged: false,
+            selectionArray: [ {name: "点赞", selected: false}, {name: "转发", selected: false}, {name: "收藏", selected: false}],
         };
     },
     computed: {
@@ -135,6 +213,31 @@ export default {
         },
         greeting() {
             return `Hello, ${this.name}!`;
+        },
+
+        selectAll: {
+            set(value) {
+                console.log("selectAll.set:" + value)
+                this.selectionArray.forEach(obj => {obj.selected = value});
+            },
+            get() {
+                
+                var selected = true
+                let outsideVar = 0
+                this.selectionArray.forEach((obj, index) => {
+                    console.log(index + ". obj.selected is: " + obj.selected)
+                     selected = (obj.selected === true);
+
+                    if (obj.selected) {
+                        outsideVar++;
+                    }
+                });
+
+                console.log("selected: " + selected);
+                console.log("outsideVar: " + outsideVar);
+                return selected
+                //return this.selectionArray.every(obj => {obj.selected === true});
+            }
         }
     },
     watch: {
@@ -154,7 +257,9 @@ export default {
         },
 
         handleClick() {
-            alert('按钮被点击了');
+            //alert('按钮被点击了');
+            console.log(this.hobbies);
+            console.log(this.gender);
         },
 
         getAnswer() {
@@ -191,6 +296,31 @@ export default {
 
         escFun() {
             console.log("escFun");
+        },
+
+        clickedReverseBtn() {
+            this.items2.reverse();
+        },
+
+        clickedSliceBtn() {
+            if (this.isSliced == false) {
+                let array = this.items2.slice(0, 4);
+                this.items2 = array;
+                this.isSliced = true
+            } else {
+                this.items2 = ["c", "o", "d", "e", "i", "s", "w", "o", "r", "l", "d"];
+                this.isSliced = false
+            }
+        },
+
+        clickedChangeBtn() {
+            if (this.isChanged) {
+                this.isChanged = !this.isChanged;
+                this.items2[4] = "i"
+            } else {
+                this.isChanged = !this.isChanged;
+                this.items2[4] = "a"
+            }
         }
     }
 };
