@@ -1,9 +1,8 @@
 <template>
     <div>
-        <div class="title-div" v-pre>1. 插值{{}}</div>
+        <div class="title-div" v-pre>1. 插值用法 {{}}</div>
         <hr>
         <h1>{{ msg }}</h1>
-        
 
         <div class="title-div" v-pre>2. v-if 和 v-show</div>
         <hr>
@@ -133,7 +132,7 @@ div {
     font-size: 20px;
     font-weight: bold;
     text-align: left;
-    color:red;
+    color:black;
 }
 
 /* ul {

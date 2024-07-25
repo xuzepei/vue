@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Example</title>
+</head>
+<body>
+    <!-- Vue 应用挂载点 -->
+    <div id="app">
+       插值: {{ message }}
+        {{ count }}
+    </div>
+
+    <!-- 引入 Vue.js -->
+    <script src="https://cdn.staticfile.net/vue/3.2.36/vue.global.min.js"></script>
+
+    <!-- 初始化 Vue 应用 -->
+    <script>
+        const { createApp } = Vue;
+
+        //1. App是一个普通的JavaScript对象，包含了Vue组件选项
+        const App = {
+            data() {
+                return {
+                    message: 'Hello, Vue 3!',
+                    count: 1
+                }
+            },
+            methods: {
+                increase() {
+                    this.count++ //需要加this，不加不认识
+                }
+            },
+        }
+
+        //2. Vue.createApp()方法用于创建一个Vue应用实例
+        const app = createApp(App)
+        
+        //3. mount('#app')方法将Vue应用实例挂载到页面中具有id="app"的DOM元素上
+        const vm = app.mount('#app')
+        vm.increase()
+
+    </script>
+</body>
+</html>
