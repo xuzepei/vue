@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Example</title>
+</head>
+<body>
+    <!-- Vue 应用挂载点 -->
+    <div id="app">
+        {{ message }}
+    </div>
+
+    <!-- 引入 Vue.js -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.min.js"></script>
+
+    <!-- 初始化 Vue 应用 -->
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    message: 'Hello, Vue 3!'
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
