@@ -11,12 +11,16 @@
 
         <div class="title-div" v-pre>3. v-bind 和 :</div>
         <hr>
-        <img :src="adsImagePath" width="100" height="100">
+        <img :src="adsImagePath" :width="width" height="100">
         <!-- <img src="../assets/test.png" width="100" height="100"> -->
+
         <button :disabled="isBtnDisabled">Button</button>
-        <div v-bind="objectOfAttrs"></div>
+
+        <div v-bind="objectOfAttrs">v-bind动态设置id和class</div>
+
         <p :class="isDynamicClass">这是个动态class</p>
         <p :style="{ color: dynaimcColor }">这是个动态style</p>
+        <p :style="myDynamicStyle">这是另一个动态style</p>
 
         <div class="title-div" v-pre>4. v-for</div>
         <hr>
@@ -29,7 +33,7 @@
         <div class="v-for-buttons">
             <button @click="clickedReverseBtn">Reverse</button>
             <button @click="clickedSliceBtn">Slice</button>
-            <button @click="clickedChangeBtn">{{isChanged ? "a to i" : "i to a"}}</button>
+            <button @click="clickedChangeBtn">{{ isChanged ? "a to i" : "i to a" }}</button>
         </div>
 
         <div class="title-div" v-pre>5. v-on 和 @</div>
@@ -68,11 +72,12 @@
         <hr>
         <div>
             <div @click="fatherClick">父节点
-                <button @click.stop="stopClick">.stop阻止事件冒泡</button>
-                <a href="http://www.baidu.com" @click.prevent="stopClick">.prevent阻止默认行为</a>
-                <button @click.once="onceClick" @click.stop="">.once程序运行期间, 只触发一次事件处理函数</button>
-                <input type="text" @keydown.enter="enterFun" @keydown.esc="escFun"/>
-                <input type="text" @keydown.esc="escFun" />
+                <ul>
+                    <li><button @click.stop="stopClick">.stop阻止事件冒泡, 触发fatherClick</button></li>
+                    <li><a href="http://www.baidu.com" @click.prevent="stopClick">.prevent阻止默认行为</a></li>
+                    <li><button @click.once="onceClick" @click.stop="">.once程序运行期间, 只触发一次事件处理函数</button></li>
+                    <li>输入回车或ESC: <input type="text" @keydown.enter="enterFun" @keydown.esc="escFun" /></li>
+                </ul>
             </div>
         </div>
         <div class="title-div" v-pre>10. v-model数据的双向绑定</div>
@@ -87,9 +92,9 @@
         </div>
         <div>
             <span>爱好: </span>
-            <input type="checkbox" v-model="hobbies" value="workout" />健身
-            <input type="checkbox" v-model="hobbies" value="reading" />看书
-            <input type="checkbox" v-model="hobbies" value="game" />游戏
+            <input type="checkbox" v-model="hobbies" value="workout" @change="handleCheckboxChange" />健身
+            <input type="checkbox" v-model="hobbies" value="reading" @change="handleCheckboxChange" />看书
+            <input type="checkbox" v-model="hobbies" value="game" @change="handleCheckboxChange" />游戏
         </div>
         <div>
             <span>性别: </span>
@@ -98,30 +103,63 @@
         </div>
         <div>
             <span>点赞数量: </span>
-            <input type="text" v-model.number="praize"/>{{ praize }}
+            <input type="text" v-model.number="praize" />{{ praize }}
         </div>
         <div>
             <span>评论: </span>
-            <input type="text" v-model.trim="comment"/>
+            <input type="text" v-model.trim="comment" />
+        </div>
+
+        <div>
+            <span>回车后或失去焦点后处理输入:</span>
+            <input type="text" placeholder="handle input text" v-model="comment" @keyup.enter="handleEnter"
+                @blur="handleEnter" />
         </div>
 
         <div class="title-div" v-pre>11. 计算属性用法</div>
         <hr>
         <div>
             <span>全选：</span>
-            <input type="checkbox" v-model="selectAll"/>
+            <input type="checkbox" v-model="selectAll" />
             <ul>
                 <li v-for="(val, index) in selectionArray" :key="index">
-                    <input type="checkbox" v-model="val.selected"/>
+                    <input type="checkbox" v-model="val.selected" />
                     <span>{{ val.name }}</span>
                 </li>
             </ul>
         </div>
+
+        <div class="title-div" v-pre>12. v-if和v-else</div>
+        <div v-if="isShow">如果isShow==true则显示这条</div>
+        <div v-else>否则显示这条</div>
+        <hr>
+
+        <div class="title-div" v-pre>13. v-once</div>
+        <div v-once>使用了v-once, 当msg变量改变时, 这里也不会变:{{ msg }}</div>
+        <hr>
+        <div class="title-div" v-pre>14. v-pre</div>
+        <div v-pre>使用了v-pre, 原样输出不解析vue: {{ msg }}</div>
+        <hr>
+        <div class="title-div" v-pre>15. Attribute绑定</div>
+        <div :title="msg">鼠标停留在我这里看看</div>
+        <div :class="{beRed: isRed}" @click="toggleRed">动态class, 点击后变红色</div>
+        <div :style="{color: dynaimcColor}" @click="toggleColor">动态style,点击后改变颜色</div>
+        <hr>
+        <div class="title-div" v-pre>16. 条件与循环</div>
+        <button @click="show=!show">{{show?"Hide List":"Show List"}}</button>
+        <button @click="pushNumber">Push Number</button>
+        <button @click="popNumber">Pop Number</button>
+        <button @click="reverseList">Reverse List</button>
+        <ul v-if="show && list.length">
+            <li v-for="value, index in list" :key="index">{{value}}</li>
+        </ul>
+        <div v-else-if="show=== false">The list is hidden.</div>
+        <div v-else-if="list.length == 0">The list is empty.</div>
+        <hr>
     </div>
 </template>
 
 <style>
-
 div {
     text-align: left;
 }
@@ -132,7 +170,7 @@ div {
     font-size: 20px;
     font-weight: bold;
     text-align: left;
-    color:black;
+    color: black;
 }
 
 /* ul {
@@ -149,20 +187,28 @@ li {
 }
 
 .v-for-row {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
 
 .v-for-row-item {
-  font-size: 32px;
-  font-weight: bold;
-  margin-right: 10px;
-  background-color: pink;
+    font-size: 32px;
+    font-weight: bold;
+    margin-right: 10px;
+    background-color: pink;
 }
 
 .v-for-buttons button {
     margin-right: 10px;
     margin-top: 10px;
+}
+
+#container {
+    color: red;
+}
+
+.beRed {
+    color: red;
 }
 
 </style>
@@ -178,10 +224,11 @@ export default {
             name: "Vue",
             isShow: true,
             adsImagePath: testImagePath,
+            width: 50,
             items: [
-            {id: 1, name: "item1"},
-            {id: 2, name: "item2"},
-            {id: 3, name: "item3"}],
+                { id: 1, name: "item1" },
+                { id: 2, name: "item2" },
+                { id: 3, name: "item3" }],
             items2: ["c", "o", "d", "e", "i", "s", "w", "o", "r", "l", "d"],
             question: '',
             answer: 'I cannot give you an answer until you ask a question!',
@@ -194,7 +241,9 @@ export default {
             isDynamicClass: {
                 green_class: true
             },
+            className: "myClassName",
             dynaimcColor: "orange",
+            myDynamicStyle: {"font-size":"40px","color":"purple","text-align":"left"},
             username: "",
             password: "",
             hobbies: [],
@@ -203,30 +252,39 @@ export default {
             comment: "",
             isSliced: false,
             isChanged: false,
-            selectionArray: [ {name: "点赞", selected: false}, {name: "转发", selected: false}, {name: "收藏", selected: false}],
+            selectionArray: [{ name: "点赞", selected: false }, { name: "转发", selected: false }, { name: "收藏", selected: false }],
+            isRed: false,
+            show: true,
+            list: [1,2,3],
         };
     },
     computed: {
         reversedMessage() {
             return this.msg.split('').reverse().join('');
         },
-        greeting() {
-            return `Hello, ${this.name}!`;
+        // greeting() {
+        //     return `Hello, ${this.name}!`;
+        // },
+        greeting: {
+            set(value) { 
+                console.log("greeting: " + this.value)
+                this.greeting = value
+            },
+            get() { 
+                return `Hello, ${this.name}!`;
+            }
         },
-
         selectAll: {
             set(value) {
                 console.log("selectAll.set:" + value)
-                this.selectionArray.forEach(obj => {obj.selected = value});
+                this.selectionArray.forEach(obj => { obj.selected = value });
             },
             get() {
-                
                 var selected = true
                 let outsideVar = 0
                 this.selectionArray.forEach((obj, index) => {
                     console.log(index + ". obj.selected is: " + obj.selected)
-                     selected = (obj.selected === true);
-
+                    selected = (obj.selected === true);
                     if (obj.selected) {
                         outsideVar++;
                     }
@@ -242,21 +300,23 @@ export default {
     watch: {
         // 监听 question 属性
         question(newValue, oldValue) {
-            print(newValue);
-            print(oldValue);
+            console.log(newValue);
+            console.log(oldValue);
 
             this.answer = '...';
             this.getAnswer();
         }
     },
     methods: {
+
         changeMsg() {
             this.msg = "Hello, World!";
             this.question = "Is this a question?"
         },
 
+
         handleClick() {
-            //alert('按钮被点击了');
+            alert('按钮被点击了');
             console.log(this.hobbies);
             console.log(this.gender);
         },
@@ -320,6 +380,34 @@ export default {
                 this.isChanged = !this.isChanged;
                 this.items2[4] = "a"
             }
+        },
+
+        handleCheckboxChange() { 
+            console.log(this.hobbies);
+        },
+
+        handleEnter() { 
+            this.comment = this.comment.trim();
+        },
+
+        toggleRed() { 
+            this.isRed = !this.isRed;
+        },
+
+        toggleColor() { 
+            this.dynaimcColor = this.dynaimcColor === 'orange' ? 'blue' : 'orange';
+        },
+
+        popNumber() { 
+            this.list.pop();
+        },
+
+        pushNumber() {
+            this.list.push(this.list.length + 1);
+        },
+
+        reverseList() { 
+            this.list.reverse();
         }
     }
 };
