@@ -142,19 +142,64 @@
         <hr>
         <div class="title-div" v-pre>15. Attribute绑定</div>
         <div :title="msg">鼠标停留在我这里看看</div>
-        <div :class="{beRed: isRed}" @click="toggleRed">动态class, 点击后变红色</div>
-        <div :style="{color: dynaimcColor}" @click="toggleColor">动态style,点击后改变颜色</div>
+        <div :class="{ beRed: isRed }" @click="toggleRed">动态class, 点击后变红色</div>
+        <div :style="{ color: dynaimcColor }" @click="toggleColor">动态style,点击后改变颜色</div>
         <hr>
         <div class="title-div" v-pre>16. 条件与循环</div>
-        <button @click="show=!show">{{show?"Hide List":"Show List"}}</button>
+        <button @click="show = !show">{{ show ? "Hide List" : "Show List" }}</button>
         <button @click="pushNumber">Push Number</button>
         <button @click="popNumber">Pop Number</button>
         <button @click="reverseList">Reverse List</button>
         <ul v-if="show && list.length">
-            <li v-for="value, index in list" :key="index">{{value}}</li>
+            <li v-for="value, index in list" :key="index">{{ value }}</li>
         </ul>
-        <div v-else-if="show=== false">The list is hidden.</div>
+        <div v-else-if="show === false">The list is hidden.</div>
         <div v-else-if="list.length == 0">The list is empty.</div>
+        <hr>
+        <div class="title-div" v-pre>17. &lt;template&gt; 上的v-if</div>
+        <button @click="toggleShowTemplate"> {{ showTemplate ? "Hide" : "Show" }} the template below</button>
+        <template v-if="showTemplate">
+            <h3>Title</h3>
+            <p>Paragraph 1</p>
+            <p>Paragraph 2</p>
+        </template>
+        <hr>
+        <div class="title-div" v-pre>18. 表单绑定</div>
+        <h3>Text Input</h3>
+        <input v-model="text" placeholder="Edit me">
+        <div>{{text}}</div>
+        <h3>Checkbox</h3>
+        <input type="checkbox" v-model="checked">
+        <label>Checked: {{checked}}</label>
+        <h3>Multi Checkbox</h3>
+        <input type="checkbox" value="Jack" v-model="checkedNames">
+        <label>Jack</label>
+        <input type="checkbox" value="Lily" v-model="checkedNames">
+        <label>Lily</label>
+        <input type="checkbox" value="Lucy" v-model="checkedNames">
+        <label>Lucy</label>
+        <div>Checked names: {{checkedNames}}</div>
+        <h3>Radio</h3>
+        <input type="radio" value="One" v-model="picked">
+        <label>One</label>
+        <input type="radio" value="Two" v-model="picked">
+        <label>Two</label>
+        <div>Picked: {{picked}}</div>
+        <h3>Select</h3>
+        <select v-model="selected">
+            <option disabled value="">Please select one</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <div>Selected: {{ selected }}</div>
+        <h3>Multi Select</h3>
+        <select v-model="multiSelected" multiple style="width: 100px;">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <div>Selected: {{ multiSelected }}</div>
         <hr>
     </div>
 </template>
@@ -210,7 +255,6 @@ li {
 .beRed {
     color: red;
 }
-
 </style>
 
 <script>
@@ -243,7 +287,7 @@ export default {
             },
             className: "myClassName",
             dynaimcColor: "orange",
-            myDynamicStyle: {"font-size":"40px","color":"purple","text-align":"left"},
+            myDynamicStyle: { "font-size": "40px", "color": "purple", "text-align": "left" },
             username: "",
             password: "",
             hobbies: [],
@@ -255,7 +299,14 @@ export default {
             selectionArray: [{ name: "点赞", selected: false }, { name: "转发", selected: false }, { name: "收藏", selected: false }],
             isRed: false,
             show: true,
-            list: [1,2,3],
+            list: [1, 2, 3],
+            showTemplate: false,
+            text: "",
+            checked: false,
+            checkedNames: ["Lily"],
+            picked: "Two",
+            selected: "B",
+            multiSelected:[]
         };
     },
     computed: {
@@ -266,11 +317,11 @@ export default {
         //     return `Hello, ${this.name}!`;
         // },
         greeting: {
-            set(value) { 
+            set(value) {
                 console.log("greeting: " + this.value)
                 this.greeting = value
             },
-            get() { 
+            get() {
                 return `Hello, ${this.name}!`;
             }
         },
@@ -308,6 +359,13 @@ export default {
         }
     },
     methods: {
+
+        scrollToBottom() {
+            window.scrollTo({
+                top: document.documentElement.scrollHeight,
+                behavior: 'smooth' // 平滑滚动
+            });
+        },
 
         changeMsg() {
             this.msg = "Hello, World!";
@@ -382,23 +440,23 @@ export default {
             }
         },
 
-        handleCheckboxChange() { 
+        handleCheckboxChange() {
             console.log(this.hobbies);
         },
 
-        handleEnter() { 
+        handleEnter() {
             this.comment = this.comment.trim();
         },
 
-        toggleRed() { 
+        toggleRed() {
             this.isRed = !this.isRed;
         },
 
-        toggleColor() { 
+        toggleColor() {
             this.dynaimcColor = this.dynaimcColor === 'orange' ? 'blue' : 'orange';
         },
 
-        popNumber() { 
+        popNumber() {
             this.list.pop();
         },
 
@@ -406,9 +464,19 @@ export default {
             this.list.push(this.list.length + 1);
         },
 
-        reverseList() { 
+        reverseList() {
             this.list.reverse();
-        }
+        },
+
+        toggleShowTemplate() {
+            this.showTemplate = !this.showTemplate;
+
+            //如果你在更新某个元素的内容后立即需要滚动到最底部，可以使用 Vue.nextTick 来确保 DOM 完成更新后再进行滚动操作：
+            this.$nextTick(() => {
+                this.scrollToBottom();
+            });
+            
+        },
     }
 };
 </script>
