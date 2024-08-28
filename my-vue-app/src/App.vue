@@ -1,19 +1,16 @@
 <template>
   <!-- <img alt="Vue logo" src="./assets/logo.png" width="100" height="100"> -->
-  <!-- <MyHelloWorld/> -->
-  <ThreeScene/>
+  <MyHelloWorld/>
 </template>
 
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
 import MyHelloWorld from './components/MyHelloWorld.vue'
-import ThreeScene from './components/ThreeScene.vue'
 
 export default {
   name: 'App',
   components: {
-    // MyHelloWorld,
-    ThreeScene,
+    MyHelloWorld,
   }
 }
 </script>
