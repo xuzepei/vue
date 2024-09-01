@@ -73,7 +73,7 @@
         <div>
             <div @click="fatherClick">父节点
                 <ul>
-                    <li><button @click.stop="stopClick">.stop阻止事件冒泡, 触发fatherClick</button></li>
+                    <li><button @click.stop="stopClick">.stop阻止事件冒泡,就不会触发fatherClick</button></li>
                     <li><a href="http://www.baidu.com" @click.prevent="stopClick">.prevent阻止默认行为</a></li>
                     <li><button @click.once="onceClick" @click.stop="">.once程序运行期间, 只触发一次事件处理函数</button></li>
                     <li>输入回车或ESC: <input type="text" @keydown.enter="enterFun" @keydown.esc="escFun" /></li>
@@ -151,7 +151,7 @@
         <button @click="popNumber">Pop Number</button>
         <button @click="reverseList">Reverse List</button>
         <ul v-if="show && list.length">
-            <li v-for="value, index in list" :key="index">{{ value }}</li>
+            <li v-for="(value, index) in list" :key="index">{{ value }}</li>
         </ul>
         <div v-else-if="show === false">The list is hidden.</div>
         <div v-else-if="list.length == 0">The list is empty.</div>
@@ -194,13 +194,23 @@
         </select>
         <div>Selected: {{ selected }}</div>
         <h3>Multi Select</h3>
-        <select v-model="multiSelected" multiple style="width: 100px;">
+        <select v-model="multiSelected" multiple style="width: 200px;">
             <option>A</option>
             <option>B</option>
             <option>C</option>
         </select>
         <div>Selected: {{ multiSelected }}</div>
         <hr>
+
+        <div class="title-div" v-pre>20. v-for与对象</div>
+
+        <ul>
+            <li v-for="(value, key, index) in myObject" :key=index>
+                {{ index }}. {{ handleKeyInVFor(key) }}: {{value}}
+            </li>
+        </ul>
+        <hr>
+
     </div>
 </template>
 
@@ -283,7 +293,7 @@ export default {
                 class: 'wrapper'
             },
             isDynamicClass: {
-                green_class: true
+                green_class: true //这里green_class是class为green_class的css, true表示这个css将生效
             },
             className: "myClassName",
             dynaimcColor: "orange",
@@ -306,7 +316,12 @@ export default {
             checkedNames: ["Lily"],
             picked: "Two",
             selected: "B",
-            multiSelected:[]
+            multiSelected: [],
+            myObject: {
+                title: 'How to do lists in Vue',
+                author: 'Jane Doe',
+                publishedAt: '2016-04-10'
+            }
         };
     },
     computed: {
@@ -476,6 +491,15 @@ export default {
                 this.scrollToBottom();
             });
             
+        },
+
+        handleKeyInVFor(key) { 
+            var str = String(key);
+            if (str.length > 0) { 
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+
+            return str;
         },
     }
 };
