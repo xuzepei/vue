@@ -19,6 +19,7 @@
         <div v-bind="objectOfAttrs">v-bind动态设置id和class</div>
 
         <p :class="isDynamicClass">这是个动态class</p>
+        <p :class="className">通过指定className来设置css样式</p>
         <p :style="{ color: dynaimcColor }">这是个动态style</p>
         <p :style="myDynamicStyle">这是另一个动态style</p>
 
@@ -142,7 +143,7 @@
         <hr>
         <div class="title-div" v-pre>15. Attribute绑定</div>
         <div :title="msg">鼠标停留在我这里看看</div>
-        <div :class="{ beRed: isRed }" @click="toggleRed">动态class, 点击后变红色</div>
+        <div :class="{ beRed: isRed }" @click="toggleRed">动态class, 点击后变红色。</div>
         <div :style="{ color: dynaimcColor }" @click="toggleColor">动态style,点击后改变颜色</div>
         <hr>
         <div class="title-div" v-pre>16. 条件与循环</div>
@@ -203,10 +204,23 @@
         <hr>
 
         <div class="title-div" v-pre>20. v-for与对象</div>
-
         <ul>
             <li v-for="(value, key, index) in myObject" :key=index>
                 {{ index }}. {{ handleKeyInVFor(key) }}: {{value}}
+            </li>
+        </ul>
+        <hr>
+
+
+        <div class="title-div" v-pre>21. 列表渲染</div>
+        <form @submit.prevent="addTodo">
+            <input v-model="newTodo" required placeholder="New todo">
+            <button>Add Todo</button>
+        </form>
+        <ul>
+            <li v-for="todo in todos" :key=todo.id>
+                {{ todo.id }}. {{ todo.text }}
+                <button @click="removeTodo(todo)">X</button>
             </li>
         </ul>
         <hr>
@@ -271,6 +285,8 @@ li {
 // import HelloWorld from './HelloWorld.vue';
 import testImagePath from '../assets/ads.jpg';
 
+let todoIndex = 0;
+
 export default {
     data() {
         return {
@@ -295,7 +311,7 @@ export default {
             isDynamicClass: {
                 green_class: true //这里green_class是class为green_class的css, true表示这个css将生效
             },
-            className: "myClassName",
+            className: "beRed",
             dynaimcColor: "orange",
             myDynamicStyle: { "font-size": "40px", "color": "purple", "text-align": "left" },
             username: "",
@@ -321,7 +337,13 @@ export default {
                 title: 'How to do lists in Vue',
                 author: 'Jane Doe',
                 publishedAt: '2016-04-10'
-            }
+            },
+            newTodo: '',
+            todos: [
+                { id: todoIndex++, text: 'Learn HTML' },
+                { id: todoIndex++, text: 'Learn JavaScript' },
+                { id: todoIndex++, text: 'Learn Vue' }
+            ]
         };
     },
     computed: {
@@ -500,6 +522,17 @@ export default {
             }
 
             return str;
+        },
+
+        addTodo() { 
+            if (this.newTodo.length > 0) { 
+                todoIndex = this.todos.length
+                this.todos.push({ id: todoIndex, text: this.newTodo })
+            }
+        },
+
+        removeTodo(todo) { 
+            this.todos = this.todos.filter(t=>t.id!=todo.id)
         },
     }
 };
