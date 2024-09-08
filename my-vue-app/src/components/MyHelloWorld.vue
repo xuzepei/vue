@@ -168,10 +168,10 @@
         <div class="title-div" v-pre>18. 表单绑定</div>
         <h3>Text Input</h3>
         <input v-model="text" placeholder="Edit me">
-        <div>{{text}}</div>
+        <div>{{ text }}</div>
         <h3>Checkbox</h3>
         <input type="checkbox" v-model="checked">
-        <label>Checked: {{checked}}</label>
+        <label>Checked: {{ checked }}</label>
         <h3>Multi Checkbox</h3>
         <input type="checkbox" value="Jack" v-model="checkedNames">
         <label>Jack</label>
@@ -179,13 +179,13 @@
         <label>Lily</label>
         <input type="checkbox" value="Lucy" v-model="checkedNames">
         <label>Lucy</label>
-        <div>Checked names: {{checkedNames}}</div>
+        <div>Checked names: {{ checkedNames }}</div>
         <h3>Radio</h3>
         <input type="radio" value="One" v-model="picked">
         <label>One</label>
         <input type="radio" value="Two" v-model="picked">
         <label>Two</label>
-        <div>Picked: {{picked}}</div>
+        <div>Picked: {{ picked }}</div>
         <h3>Select</h3>
         <select v-model="selected">
             <option disabled value="">Please select one</option>
@@ -206,7 +206,7 @@
         <div class="title-div" v-pre>20. v-for与对象</div>
         <ul>
             <li v-for="(value, key, index) in myObject" :key=index>
-                {{ index }}. {{ handleKeyInVFor(key) }}: {{value}}
+                {{ index }}. {{ handleKeyInVFor(key) }}: {{ value }}
             </li>
         </ul>
         <hr>
@@ -218,13 +218,26 @@
             <button>Add Todo</button>
         </form>
         <ul>
-            <li v-for="todo in todos" :key=todo.id>
-                {{ todo.id }}. {{ todo.text }}
+            <li v-for="todo in filteredTodos" :key=todo.id>
+                <input type="checkbox" v-model="todo.done">
+                <del v-if="todo.done">{{ todo.id }}. {{ todo.text }}</del>
+                <span v-else>{{ todo.id }}. {{ todo.text }}</span>
                 <button @click="removeTodo(todo)">X</button>
             </li>
         </ul>
+        <button @click="clikcedHideCompletedButton">{{ this.hideCompleted ? "Show all" : "Hide completed"}}</button>
         <hr>
-
+        <div class="title-div" v-pre>22. 生命周期和模板引用</div>
+        <p ref="pElementRef">hello</p>
+        <div class="title-div" v-pre>23. 侦听器</div>
+        <p>Todo id: {{todoId}}</p>
+        <button @click="todoId++" :disabled="!todoData">Fetch next todo</button>
+        <p v-if="!todoData">Loading...</p>
+        <pre v-else>{{ todoData }}</pre>
+        <hr>
+        <div class="title-div" v-pre>24. 子组件可以通过 props 从父组件接受动态数据</div>
+        <div>{{ msgInProps || 'No props passed yet' }}</div>
+        <div class="title-div" v-pre>25. 子组件可以通过 Emits 可以向父组件触发事件</div>
     </div>
 </template>
 
@@ -288,6 +301,22 @@ import testImagePath from '../assets/ads.jpg';
 let todoIndex = 0;
 
 export default {
+    mounted() {
+        console.log('MyHelloWorld has been mounted!');
+        this.$refs.pElementRef.textContent = 'mounted! 666'
+        this.fetchData()
+
+    },
+    created() { 
+        console.log('MyHelloWorld has been created!');
+
+        // 带参数触发
+        this.$emit('response', 'Hello from child')
+    },
+    props: {
+        msgInProps: String
+    },
+    emits: ['response'],
     data() {
         return {
             msg: "Hello, Vue!",
@@ -340,10 +369,13 @@ export default {
             },
             newTodo: '',
             todos: [
-                { id: todoIndex++, text: 'Learn HTML' },
-                { id: todoIndex++, text: 'Learn JavaScript' },
-                { id: todoIndex++, text: 'Learn Vue' }
-            ]
+                { id: todoIndex++, text: 'Learn HTML', done: false },
+                { id: todoIndex++, text: 'Learn JavaScript', done: false },
+                { id: todoIndex++, text: 'Learn Vue', done: false }
+            ],
+            hideCompleted: false,
+            todoId: 1,
+            todoData: null,
         };
     },
     computed: {
@@ -383,6 +415,9 @@ export default {
                 return selected
                 //return this.selectionArray.every(obj => {obj.selected === true});
             }
+        },
+        filteredTodos() { 
+            return this.hideCompleted ? this.todos.filter(t => t.done == false) : this.todos;
         }
     },
     watch: {
@@ -393,6 +428,12 @@ export default {
 
             this.answer = '...';
             this.getAnswer();
+        },
+
+        todoId(newValue) { 
+            console.log("todoId has changed to " + newValue);
+
+            this.fetchData();
         }
     },
     methods: {
@@ -512,28 +553,38 @@ export default {
             this.$nextTick(() => {
                 this.scrollToBottom();
             });
-            
+
         },
 
-        handleKeyInVFor(key) { 
+        handleKeyInVFor(key) {
             var str = String(key);
-            if (str.length > 0) { 
+            if (str.length > 0) {
                 return str.charAt(0).toUpperCase() + str.slice(1);
             }
 
             return str;
         },
 
-        addTodo() { 
-            if (this.newTodo.length > 0) { 
+        addTodo() {
+            if (this.newTodo.length > 0) {
                 todoIndex = this.todos.length
                 this.todos.push({ id: todoIndex, text: this.newTodo })
             }
         },
 
-        removeTodo(todo) { 
-            this.todos = this.todos.filter(t=>t.id!=todo.id)
+        removeTodo(todo) {
+            this.todos = this.todos.filter(t => t.id != todo.id)
         },
+
+        clikcedHideCompletedButton() {
+            this.hideCompleted = !this.hideCompleted;
+        },
+
+        async fetchData() { 
+            this.todoData = null
+            const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${this.todoId}`)
+            this.todoData = await res.json()
+        }
     }
 };
 </script>
