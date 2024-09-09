@@ -1,17 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <MyHelloWorld :msgInProps="greeting" @response="fromChildResponse" />
+    <div> {{ childMsg || 'No child msg yet' }}</div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+//import HelloWorld from './components/HelloWorld.vue'
+import MyHelloWorld from './components/MyHelloWorld.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    //HelloWorld
+    MyHelloWorld
+  },
+  data() {
+    return {
+      greeting: "Hello from parent.",
+      childMsg: null,
+    }
+  },
+  methods: {
+    fromChildResponse(msg) {
+      console.log("fromChildResponse: " + msg)
+      this.childMsg = msg
+    },
+  },
+  mounted() {
+    console.log('App has been mounted!');
   }
 }
 </script>
@@ -22,7 +40,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: black;
   margin-top: 60px;
 }
 </style>
