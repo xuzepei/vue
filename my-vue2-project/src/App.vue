@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <MyHelloWorld :msgInProps="greeting" @response="fromChildResponse" />
-    <div> {{ childMsg || 'No child msg yet' }}</div>
+    <!-- <MyHelloWorld :msgInProps="greeting" @response="fromChildResponse" />
+    <div> {{ childMsg || 'No child msg yet' }}</div> -->
+
+    <router-view></router-view>
   </div>
 </template>
 
@@ -14,7 +16,7 @@ export default {
   name: 'App',
   components: {
     //HelloWorld
-    MyHelloWorld
+    //MyHelloWorld
   },
   data() {
     return {
