@@ -5,6 +5,12 @@ import router from './router'
 //导入全局样式表
 import './assets/css/global.css'
 
+//按需导入element-ui
+import "./plugins/element-ui.js"
+
+
+
+
 Vue.config.productionTip = false
 
 new Vue({

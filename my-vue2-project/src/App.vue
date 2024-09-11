@@ -4,6 +4,7 @@
     <!-- <MyHelloWorld :msgInProps="greeting" @response="fromChildResponse" />
     <div> {{ childMsg || 'No child msg yet' }}</div> -->
 
+    <!-- 路由占位符 -->
     <router-view></router-view>
   </div>
 </template>
