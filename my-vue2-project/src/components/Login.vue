@@ -6,9 +6,19 @@
                 <img src="../assets/logo.png" alt="">
             </div>
             <!-- 登录表单 -->
-            <el-form label-width="80px">
-                <el-form-item label="活动名称">
-                    <el-input></el-input>
+            <el-form class="login_form" label-width="0px">
+                <!-- 用户名 -->
+                <el-form-item label="">
+                    <el-input prefix-icon="el-icon-user-solid" placeholder="请输入用户名"></el-input>
+                </el-form-item>
+                <!-- 密码 -->
+                <el-form-item label="">
+                    <el-input prefix-icon="el-icon-user-solid" placeholder="请输入密码"></el-input>
+                </el-form-item>
+                <!-- 按钮区 -->
+                <el-form-item label="" class="buttons">
+                    <el-button type="primary">登录</el-button>
+                    <el-button>重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -29,6 +39,7 @@
 }
 
 .login_box {
+    position: relative;
     width: 400px;
     height: 300px;
     box-shadow: 0 0 20px rgba(0, 0, 255, 255);
@@ -55,6 +66,20 @@
         background-color: #eee;
     }
 }
+
+.login_form {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
 </style>
 
 <script>
