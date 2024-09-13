@@ -9,11 +9,11 @@
             <el-form class="login_form" label-width="0px">
                 <!-- 用户名 -->
                 <el-form-item label="">
-                    <el-input prefix-icon="el-icon-user-solid" placeholder="请输入用户名"></el-input>
+                    <el-input prefix-icon="iconfont icon-yonghu" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item label="">
-                    <el-input prefix-icon="el-icon-user-solid" placeholder="请输入密码"></el-input>
+                    <el-input prefix-icon="iconfont icon-mima" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <!-- 按钮区 -->
                 <el-form-item label="" class="buttons">
@@ -25,6 +25,8 @@
     </div>
 </template>
 
+
+<!-- scoped 样式，只在当前组件中生效 -->
 <style lang="less" scoped>
 .login_container {
     width: 100%;
@@ -80,6 +82,16 @@
     justify-content: flex-end;
 }
 
+</style>
+
+<!-- 非 scoped 的样式，全局生效 -->
+<style lang="less">
+.icon-yonghu {
+    margin-left: 3px;
+}
+.icon-mima {
+    margin-left: 3px;
+}
 </style>
 
 <script>
