@@ -19,7 +19,7 @@
                 </el-form-item>
                 <!-- 按钮区 -->
                 <el-form-item label="" class="buttons">
-                    <el-button type="primary">登录</el-button>
+                    <el-button type="primary" @click="login">登录</el-button>
                     <el-button @click="resetLoginForm">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -97,8 +97,26 @@
 </style>
 
 <script>
+
+const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
 export default {
     data() {
+        var validateUsername = (rule, value, callback) => {
+            console.log("validateUsername: value:" + value);
+
+            //判断是否为开发环境
+            if (process.env.NODE_ENV === 'development') {
+                callback();
+            } else if (process.env.NODE_ENV === 'production') {
+                if (!emailRegex.test(value)) {
+                    callback(new Error('请输入有效的邮箱地址！'));
+                } else {
+                    callback();
+                }
+            }
+        };
+
         return {
             //登录表单数据绑定对象
             loginForm: {
@@ -107,12 +125,13 @@ export default {
             },
             loginFormRules: {
                 username: [
-                    { required: true, message: '请输入登录用户名', trigger: 'blur' },
-                    { min: 3, max: 10, message: "长度在3到10个字符", trigger: 'blur' },
+                    { required: true, message: '请输入登录用户名', trigger: 'submit' }, //trigger:blur(失去焦点), submit(点击submit) 
+                    { min: 3, max: 255, message: "长度在3到255个字符", trigger: 'submit' },
+                    { validator: validateUsername, trigger: 'submit' }
                 ],
                 password: [
-                    { required: true, message: '请输入登录密码', trigger: 'blur' },
-                    { min: 6, max: 15, message: "长度在6到15个字符", trigger: 'blur' },
+                    { required: true, message: '请输入登录密码', trigger: 'change' },
+                    { min: 6, max: 15, message: "长度在6到15个字符", trigger: 'change' },
                 ],
             }
         }
@@ -120,6 +139,26 @@ export default {
     methods: {
         resetLoginForm() {
             this.$refs.loginFormRef.resetFields();
+        },
+        login() {
+            this.$refs.loginFormRef.validate((valid) => {
+
+                console.log("valid:" + valid);
+
+                if (valid) {
+
+                    const result = this.$http.post("login", this.loginForm);
+                    console.log(result);
+
+                    return true;
+                } else {
+                    console.log("error submit!!");
+                    return false;
+                }
+            });
+        },
+        validateUsername() {
+
         }
     }
 }

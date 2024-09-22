@@ -11,6 +11,9 @@ import './assets/css/global.css'
 //按需导入element-ui
 import "./plugins/element-ui.js"
 
+//引入axios
+import "./plugins/axios.js"
+
 
 
 
