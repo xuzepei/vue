@@ -147,8 +147,9 @@ export default {
 
                 if (valid) {
 
-                    const result = this.$http.post("login", this.loginForm);
-                    console.log(result);
+                    // const result = this.$http.post("login", this.loginForm);
+                    // console.log("login result: " + result);
+                    this.test();
 
                     return true;
                 } else {
@@ -159,7 +160,33 @@ export default {
         },
         validateUsername() {
 
-        }
+        },
+        async test() {
+            //this.loading = true;
+            try {
+                // 使用 this.$http 调用
+                const response = await this.$http.post('/token', this.loginForm);
+                console.log("Response.data: " + response.data);
+                console.log("response.statue:" + response.status);
+                if (response.status === 200) {
+                    console.log("22222");
+                    const contentType = response.headers['content-type'];
+                    if (contentType && contentType.includes('application/json')) {
+                        console.log("3333");
+                        console.log('Response is JSON');
+                        console.log(response.data);
+                    }
+                } else { 
+                    console.log("55555");
+                }
+
+            } catch (err) {
+                this.error = 'Failed to login';
+                console.error(err);
+            } finally {
+                //this.loading = false;
+            }
+        },
     }
 }
 </script>
