@@ -99,16 +99,26 @@
 <script>
 
 const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+function isDev() { 
+    if (process.env.NODE_ENV === 'development') {
+        return true;
+    }
+
+    return false;
+}
 
 export default {
     data() {
+
+        var tokenInfo = null;
+
         var validateUsername = (rule, value, callback) => {
             console.log("validateUsername: value:" + value);
 
             //判断是否为开发环境
-            if (process.env.NODE_ENV === 'development') {
+            if (isDev()) {
                 callback();
-            } else if (process.env.NODE_ENV === 'production') {
+            } else {
                 if (!emailRegex.test(value)) {
                     callback(new Error('请输入有效的邮箱地址！'));
                 } else {
@@ -120,8 +130,8 @@ export default {
         return {
             //登录表单数据绑定对象
             loginForm: {
-                username: "",
-                password: "",
+                username: this.$isDev() ? "TestLabCN":"",
+                password: this.$isDev() ? "cntestfreqty" : "",
             },
             loginFormRules: {
                 username: [
@@ -141,16 +151,19 @@ export default {
             this.$refs.loginFormRef.resetFields();
         },
         login() {
+
+            if (this.$canClick() === false) { 
+
+                console.log("Can not click!!!");
+                return false;
+            }
+
             this.$refs.loginFormRef.validate((valid) => {
 
                 console.log("valid:" + valid);
 
                 if (valid) {
-
-                    // const result = this.$http.post("login", this.loginForm);
-                    // console.log("login result: " + result);
-                    this.test();
-
+                    this.request();
                     return true;
                 } else {
                     console.log("error submit!!");
@@ -158,31 +171,49 @@ export default {
                 }
             });
         },
-        validateUsername() {
-
-        },
-        async test() {
+        async request() {
             //this.loading = true;
             try {
                 // 使用 this.$http 调用
                 const response = await this.$http.post('/token', this.loginForm);
-                console.log("Response.data: " + response.data);
+                
                 console.log("response.statue:" + response.status);
+                
                 if (response.status === 200) {
-                    console.log("22222");
                     const contentType = response.headers['content-type'];
                     if (contentType && contentType.includes('application/json')) {
-                        console.log("3333");
-                        console.log('Response is JSON');
+
                         console.log(response.data);
+
+                        if (response.data.success === true) {
+                            if (response.data.data != null) { 
+                                this.tokenInfo = response.data.data.content;
+                                window.sessionStorage.setItem("AccessToken", this.tokenInfo.AccessToken);
+                                window.sessionStorage.setItem("ExpiresIn", this.tokenInfo.ExpiresIn);
+                                window.sessionStorage.setItem("RefreshToken", this.tokenInfo.RefreshToken);
+
+                                const msg = "Login succeeded!";
+
+                                console.log(msg);
+                                this.$message.success(msg);
+                                this.$router.push("/");
+                                return;
+                            }
+                        } else {
+                            console.log("errorCode: " + response.data.errorCode);
+                            console.log("errorMessage: " + response.data.errorMessage);
+                        }
                     }
-                } else { 
-                    console.log("55555");
                 }
 
-            } catch (err) {
-                this.error = 'Failed to login';
-                console.error(err);
+                const msg = 'Failed to login';
+                console.error(msg);
+                this.$message.error(msg);
+
+
+            } catch (e) {
+                console.error(e);
+                this.$message.error(e);
             } finally {
                 //this.loading = false;
             }
