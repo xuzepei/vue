@@ -10,7 +10,7 @@ Vue.prototype.$isDev = function () {
 
 //判断是否能点击，防抖
 var gDebounceTimeout = null;
-Vue.prototype.$canClick = function () {
+Vue.prototype.$isClickable = function () {
     if (gDebounceTimeout) {
         return false;
     }

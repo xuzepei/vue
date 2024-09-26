@@ -5,6 +5,7 @@ Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
-Vue.use(Message)
 
-Vue.prototype.$message = Message
+
+//Vue.use(Message)，Message不需要注册
+Vue.prototype.$message = Message;

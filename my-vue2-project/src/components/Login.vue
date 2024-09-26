@@ -109,9 +109,6 @@ function isDev() {
 
 export default {
     data() {
-
-        var tokenInfo = null;
-
         var validateUsername = (rule, value, callback) => {
             console.log("validateUsername: value:" + value);
 
@@ -152,9 +149,8 @@ export default {
         },
         login() {
 
-            if (this.$canClick() === false) { 
-
-                console.log("Can not click!!!");
+            if (this.$isClickable() === false) { 
+                console.log("Not clickable!!!");
                 return false;
             }
 
