@@ -1,7 +1,8 @@
 <template>
     <el-container>
-        <el-header>Header
-            <el-button type="primary" @click="logout">退出</el-button>
+        <el-header>
+            <h1>管理后台</h1>
+            <el-button class="logout_btn" type="primary" @click="logout">退出</el-button>
         </el-header>
         <el-container>
             <el-aside width="200px">Aside</el-aside>
@@ -18,7 +19,18 @@
 }
 .el-header {
     background-color: #373d41;
+    display: flex;
+    display: -webkit-flex; //safari
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
+
+.logout_btn {
+    
+}
+
+
 .el-aside {
     background-color: #333744;
 }
