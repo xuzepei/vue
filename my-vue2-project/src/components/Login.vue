@@ -27,7 +27,7 @@
     </div>
 </template>
 
-
+<!-- lang="less"，支持less语法, 需要先安装, 命令 npm install less less-loader --save-dev -->
 <!-- scoped 样式，只在当前组件中生效 -->
 <style lang="less" scoped>
 .login_container {
@@ -36,10 +36,12 @@
     background-color: #2b4b6b;
 
     display: flex;
+    flex-direction: row;
+    /* 主轴方向上的对齐方式 */
     justify-content: center;
-    /* 水平居中 */
+    /* 交叉轴方向上的对齐方式 */
     align-items: center;
-    /* 垂直居中 */
+    
 }
 
 .login_box {

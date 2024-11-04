@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/Login.vue'
+import LoginTest from './components/LoginTest.vue'
 import Home from './components/Home.vue'
 import MyHelloWorld from './components/MyHelloWorld.vue'
 
@@ -9,13 +10,14 @@ Vue.use(Router)
 const router = new Router({
     mode: 'history', // Use 'history' mode to avoid hash in URLs
     routes: [
-        // { path: '/', redirect: '/login' },
-        {
-            path: '/', name: 'Home', component: Home, meta: {
-                requireAuth: true //need to login
-            }
-        },
-        { path: '/login', name: 'Login', component: Login }
+        { path: '/login', component: LoginTest },
+        { path: '/', redirect: '/login' },
+        // {
+        //     path: '/', name: 'Home', component: Home, meta: {
+        //         requireAuth: true //need to login
+        //     }
+        // },
+        // { path: '/login', name: 'Login', component: Login }
     ]
 })
 
@@ -33,6 +35,7 @@ router.beforeEach((to, from, next) => {
     } else { 
         console.log("accessToken: " + accessToken)
     }
+    
     //要求登录的
     if (to.matched.some(record => record.meta.requireAuth)) {
         if (!isLoggedIn) {

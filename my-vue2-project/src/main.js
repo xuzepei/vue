@@ -22,7 +22,7 @@ import axios from './plugins/axios'
 Vue.prototype.$http = axios;
 
 
-
+//生产环境下不产生控制台提示
 Vue.config.productionTip = false
 
 new Vue({
