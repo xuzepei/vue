@@ -6,7 +6,7 @@
                 <img src="../assets/logo.png">
             </div>
             <!-- 登录表单区域 -->
-            <el-form label-width="0px" class="login_form" :model="loginForm" :rules="loginFormRules">
+            <el-form label-width="0px" class="login_form" :model="loginForm" :rules="loginFormRules" ref="loginFormRef">
                 <!-- 用户名 -->
                 <el-form-item prop="username">
                     <el-input prefix-icon="iconfont icon-yonghu" v-model="loginForm.username"></el-input>
@@ -17,8 +17,8 @@
                 </el-form-item>
                 <!-- 按钮区域 -->
                 <el-form-item class="buttons">
-                    <el-button type="info">重置</el-button>
-                    <el-button type="primary">登录</el-button>
+                    <el-button type="info" @click="reset">重置</el-button>
+                    <el-button type="primary" @click="login">登录</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -95,16 +95,39 @@ export default {
             loginFormRules: {
                 // 验证用户名是否合法
                 username: [
-                    { required: true, message: "请输入用户名", trigger: "blur" },
-                    { min: 3, max: 10, message: "长度在3～10个字符",trigger: "blur"}
+                    { required: true, message: "请输入用户名", trigger:"blur" },
+                    { min: 3, max: 10, message: "长度在3～10个字符", trigger: "blur"}
                 ],
                 // 验证密码是否合法
                 password: [
-                    { required: true, message: " 请输入密码", trigger: "blur" },
-                    { min: 6, max: 15, message: "长度在6～15个字符", trigger: "blur" }
+                    { required: true, message: " 请输入密码", trigger: "change" },
+                    { min: 6, max: 15, message: "长度在6～15个字符", trigger: "change" }
                 ]
             },
         };
+    },
+    methods: { 
+        reset() { 
+            this.$refs.loginFormRef.resetFields();
+        },
+
+        login() { 
+
+            if (this.$isClickable() === false) {
+                console.log("Not clickable!!!");
+                return false;
+            }
+
+            this.$refs.loginFormRef.validate((valid) => {
+                if (valid) {
+                    alert("提交验证成功！");
+                } else { 
+                    alert("提交验证失败！");
+                }
+
+                //this.$refs.loginFormRef.clearValidate();
+            });
+        }
     }
 };
 </script>

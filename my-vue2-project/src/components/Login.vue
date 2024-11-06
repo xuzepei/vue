@@ -134,8 +134,8 @@ export default {
             },
             loginFormRules: {
                 username: [
-                    { required: true, message: '请输入登录用户名', trigger: 'submit' }, //trigger:blur(失去焦点), submit(点击submit) 
-                    { min: 3, max: 255, message: "长度在3到255个字符", trigger: 'submit' },
+                    { required: true, message: '请输入登录用户名', trigger: 'blur' }, //trigger:blur(失去焦点), submit(点击submit) 
+                    { min: 3, max: 255, message: "长度在3到255个字符", trigger: 'blur' },
                     { validator: validateUsername, trigger: 'submit' }
                 ],
                 password: [

@@ -12,14 +12,11 @@ import './assets/css/global.css'
 //按需导入element-ui
 import "./plugins/element-ui.js"
 
-
 //导入tool.js
 import './plugins/tool.js'
 
 //引入刚才创建的 axios 实例
-import axios from './plugins/axios'
-//将axios挂载到Vue原型上，这样所有组件都可以通过this.$http访问
-Vue.prototype.$http = axios;
+import './plugins/axios'
 
 
 //生产环境下不产生控制台提示

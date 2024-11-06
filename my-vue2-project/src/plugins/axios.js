@@ -12,3 +12,6 @@ const instance = axios.create({
 });
 
 export default instance;
+
+//将axios挂载到Vue原型上，这样所有组件都可以通过this.$http访问
+Vue.prototype.$http = instance;
