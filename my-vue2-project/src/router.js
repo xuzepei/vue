@@ -10,14 +10,14 @@ Vue.use(Router)
 const router = new Router({
     mode: 'history', // Use 'history' mode to avoid hash in URLs
     routes: [
-        { path: '/login', component: LoginTest },
-        { path: '/', redirect: '/login' },
-        // {
-        //     path: '/', name: 'Home', component: Home, meta: {
-        //         requireAuth: true //need to login
-        //     }
-        // },
-        // { path: '/login', name: 'Login', component: Login }
+        // { path: '/login', component: LoginTest },
+        // { path: '/', redirect: '/login' },
+        {
+            path: '/', name: 'Home', component: Home, meta: {
+                requireAuth: true //need to login
+            }
+        },
+        { path: '/login', name: 'Login', component: Login }
     ]
 })
 

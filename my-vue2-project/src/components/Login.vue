@@ -19,7 +19,7 @@
                 </el-form-item>
                 <!-- 按钮区 -->
                 <el-form-item label="" class="buttons">
-                    <el-button type="primary" @click="login">登录</el-button>
+                    <el-button type="primary" @click="login" :loading="isRequesting">登录</el-button>
                     <el-button @click="resetLoginForm">重置</el-button>
                 </el-form-item>
             </el-form>
@@ -142,7 +142,9 @@ export default {
                     { required: true, message: '请输入登录密码', trigger: 'change' },
                     { min: 6, max: 15, message: "长度在6到15个字符", trigger: 'change' },
                 ],
-            }
+            },
+            isRequesting: false,
+            tokenInfo: null,
         }
     },
     methods: {
@@ -170,12 +172,13 @@ export default {
             });
         },
         async request() {
-            //this.loading = true;
+            this.isRequesting = true;
             try {
                 // 使用 this.$http 调用
                 const response = await this.$http.post('/token', this.loginForm);
                 
                 console.log("response.statue:" + response.status);
+                this.isRequesting = false;
                 
                 if (response.status === 200) {
                     const contentType = response.headers['content-type'];
