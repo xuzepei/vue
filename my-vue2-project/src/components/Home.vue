@@ -1,33 +1,36 @@
 <template>
     <el-container>
         <el-header>
-            <h1 :style="{ color: '#ffffff' }">Panda Cloud</h1>
+            <h1 :style="{ color: '#ffffff' }">{{ title }}</h1>
             <el-button class="logout-btn" type="text" @click="logout">退出</el-button>
         </el-header>
         <el-container>
             <el-aside width="220px">
                 <el-menu class="aside-menu" :default-active="activeIndex" background-color="#333744" text-color="#fff"
-                    active-text-color="ffd04b">
-                    <!-- <el-sub-menu index="1">
-                        <template #title>
-                            <span>Main Menu</span>
-                        </template>
-<el-menu-item index="1-1">Sub Item 1</el-menu-item>
-<el-menu-item index="1-2">Sub Item 2</el-menu-item>
-</el-sub-menu> -->
-                    <el-submenu v-for="item in asideMenuData" :key="item.index" :index="item.index">
-                        <div class="menu-item">
-                            <i :class="item.icon"></i>
-                            <span>{{ item.label }}</span>
-                        </div>
-                        <el-menu-item-group>
-                            <el-menu-item v-for="child in item.children" :key="child.index" :index="child.index">
-                                <div class="submenu-item">
-                                    <span>{{ child.label }}</span>
+                    active-text-color="ff0000" @open="handleOpen" @close="handleClose">
+                    <template v-for="item in asideMenuData">
+                        <el-submenu :key="item.index" :index="item.index" v-if="item.children">
+                            <template slot="title">
+                                <div class="menu-item">
+                                    <i :class="item.icon"></i>
+                                    <span>{{ item.label }}</span>
                                 </div>
-                            </el-menu-item>
-                        </el-menu-item-group>
-                    </el-submenu>
+                            </template>
+                            <el-menu-item-group>
+                                <el-menu-item v-for="child in item.children" :key="child.index" :index="child.index">
+                                    <div class="submenu-item">
+                                        <span>{{ child.label }}</span>
+                                    </div>
+                                </el-menu-item>
+                            </el-menu-item-group>
+                        </el-submenu>
+                        <el-menu-item :key="item.index" :index="item.index" v-else>
+                            <div class="menu-item">
+                                <i :class="item.icon"></i>
+                                <span>{{ item.label }}</span>
+                            </div>
+                        </el-menu-item>
+                    </template>
                 </el-menu>
             </el-aside>
             <el-main>Main</el-main>
@@ -68,18 +71,17 @@
     margin-bottom: 0px;
 }
 
-.el-menu-item {
-}
+.el-menu-item {}
 
 .menu-item {
-    display: flex;
-    margin-left: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    /* 上下居中对齐 */
-    align-items: center;
-    /* 图标和文字间的间距 */
-    gap: 10px;
+    // display: flex;
+    // margin-left: 20px;
+    // margin-top: 30px;
+    // margin-bottom: 30px;
+    // /* 上下居中对齐 */
+    // align-items: center;
+    // /* 图标和文字间的间距 */
+    // gap: 10px;
 }
 
 .menu-item i {
@@ -134,9 +136,15 @@ export default {
     },
     data() {
         return {
+            title: "Panda Cloud Copy",
             asideMenuData: [
                 {
                     label: "Dashboard",
+                    index: "0",
+                    icon: "el-icon-s-home",
+                },
+                {
+                    label: "Cases",
                     index: "1",
                     icon: "el-icon-s-home",
                 },
@@ -152,21 +160,11 @@ export default {
                         {
                             label: "Role Management",
                             index: "2-2",
-                            children: [
-                                {
-                                    label: "Add Role",
-                                    index: "2-2-1",
-                                },
-                                {
-                                    label: "Edit Role",
-                                    index: "2-2-2",
-                                },
-                            ],
                         },
                     ],
                 },
             ],
-            activeIndex: "1", // 默认激活的菜单项
+            activeIndex: "0", // 默认激活的菜单项
         };
     },
     computed: {
@@ -176,6 +174,14 @@ export default {
 
     },
     methods: {
+
+        handleOpen() { 
+            console.log("####handleOpen");
+        },
+
+        handleClose() {
+            console.log("####handleClose");
+        },
 
         logout() {
             console.log("logout");
