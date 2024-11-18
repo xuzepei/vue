@@ -6,3 +6,12 @@ body,
     padding: 0;
     background-color: white;
 }
+
+/* 全局颜色 */
+:root {
+    --primary-color: #42A5F5;
+    --secondary-color: #FF5722;
+    --background-color: #FAFAFA;
+    --gray-color:#69696D;
+    --dark-color:#69696D;
+}

@@ -6,8 +6,8 @@
         </el-header>
         <el-container>
             <el-aside width="220px">
-                <el-menu class="aside-menu" :default-active="activeIndex" background-color="#333744" text-color="#fff"
-                    active-text-color="ff0000" @open="handleOpen" @close="handleClose">
+                <el-menu class="aside-menu" :default-active="activeIndex" :background-color="$colors.background" :text-color="$colors.textColor"
+                    :active-text-color="$colors.darkColor" @open="handleOpen" @close="handleClose">
                     <template v-for="item in asideMenuData">
                         <el-submenu :key="item.index" :index="item.index" v-if="item.children">
                             <template slot="title">
@@ -57,14 +57,19 @@
 .logout-btn {}
 
 .el-aside {
-    background-color: #333744;
+    background-color: var(--background-color);
 }
 
-.aside-menu {}
+// .aside-menu {
+// }
 
 // .el-header h1 {
 //     color: red;
 // }
+
+.el-menu {
+    
+}
 
 .el-menu-item-group {
     margin-top: 0px;
@@ -87,16 +92,16 @@
 .menu-item i {
     /* 防止文字换行 */
     //white-space: nowrap;
-    color: white;
+    color: var(--dark-color);
     font-size: 25px;
 }
 
 .menu-item span {
     /* 防止文字换行 */
     //white-space: nowrap;
-    color: white;
+    // color: white;
     font-size: 18px;
-
+    margin-left: 5px;
     white-space: normal; // 允许换行显示
     word-break: break-all; // 英文单词允许拆分显示
     line-height: normal; // 调整行高
@@ -105,7 +110,7 @@
 .submenu-item {
     display: flex;
     margin-top: 0px;
-    margin-left: 40px;
+    margin-left: 0px;
     /* 上下居中对齐 */
     // align-items: center;
 
@@ -113,7 +118,7 @@
 }
 
 .submenu-item span {
-    color: white;
+    // color: var(--dark-color);
     font-size: 15px;
     white-space: normal; // 允许换行显示
     word-break: break-all; // 英文单词允许拆分显示
@@ -130,6 +135,7 @@
 export default {
     mounted() {
         console.log('Home has been mounted!');
+        console.log(this.$colors);
     },
     created() {
         console.log('Home has been created!');
