@@ -5,4 +5,6 @@ export default {
   background: '#FAFAFA',
   grayColor: '#69696D',
   darkColor: '#13161B',
+  selectedColor: '#D3E3FD',
+  hoverColor:'#EBEEF6',
 };

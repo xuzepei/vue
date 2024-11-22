@@ -4,6 +4,7 @@ import Login from './components/Login.vue'
 import LoginTest from './components/LoginTest.vue'
 import Home from './components/Home.vue'
 import MyHelloWorld from './components/MyHelloWorld.vue'
+import HelloWorld from './components/HelloWorld.vue'
 
 Vue.use(Router)
 
@@ -15,7 +16,10 @@ const router = new Router({
         {
             path: '/', name: 'Home', component: Home, meta: {
                 requireAuth: true //need to login
-            }
+            }, children: [ {
+                path: '/hello',
+                component: HelloWorld
+            }], redirect: '/hello'
         },
         { path: '/login', name: 'Login', component: Login }
     ]
