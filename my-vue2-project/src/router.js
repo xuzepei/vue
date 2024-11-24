@@ -5,6 +5,8 @@ import LoginTest from './components/LoginTest.vue'
 import Home from './components/Home.vue'
 import MyHelloWorld from './components/MyHelloWorld.vue'
 import HelloWorld from './components/HelloWorld.vue'
+import Dashboard from './components/Dashboard.vue'
+import Cases from './components/Cases.vue'
 
 Vue.use(Router)
 
@@ -16,10 +18,16 @@ const router = new Router({
         {
             path: '/', name: 'Home', component: Home, meta: {
                 requireAuth: true //need to login
-            }, children: [ {
+            }, children: [{
                 path: '/hello',
                 component: HelloWorld
-            }], redirect: '/hello'
+            }, {
+                path: '/dashboard',
+                component: Dashboard
+            }, {
+                path: '/cases',
+                component: Cases
+                }], redirect: '/dashboard'
         },
         { path: '/login', name: 'Login', component: Login }
     ]
@@ -36,10 +44,10 @@ router.beforeEach((to, from, next) => {
         isLoggedIn = false
 
         console.log("isLoggedIn: " + isLoggedIn)
-    } else { 
+    } else {
         console.log("accessToken: " + accessToken)
     }
-    
+
     //要求登录的
     if (to.matched.some(record => record.meta.requireAuth)) {
         if (!isLoggedIn) {

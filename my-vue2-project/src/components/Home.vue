@@ -5,9 +5,10 @@
             <el-button class="logout-btn" type="text" @click="logout">退出</el-button>
         </el-header>
         <el-container>
-            <el-aside width="250px">
-                <el-menu class="aside-menu" :default-active="activeIndex" :background-color="$colors.background" :text-color="$colors.textColor"
-                    :active-text-color="$colors.darkColor" @open="handleOpen" @close="handleClose" @select="handleSelect">
+            <el-aside :width="asideWidth">
+                <el-menu class="aside-menu" :default-active="activeIndex" :background-color="$colors.background"
+                    :text-color="$colors.textColor" :active-text-color="$colors.darkColor" :collapse="isCollapse"
+                    @open="handleOpen" @close="handleClose" @select="handleSelect" router>
                     <template v-for="item in asideMenuData">
                         <el-submenu class="custom-submenu" :key="item.index" :index="item.index" v-if="item.children">
                             <template slot="title">
@@ -17,7 +18,8 @@
                                 </div>
                             </template>
                             <el-menu-item-group>
-                                <el-menu-item class="for-level2" v-for="child in item.children" :key="child.index" :index="child.index">
+                                <el-menu-item class="for-level2" v-for="child in item.children" :key="child.index"
+                                    :index="child.index">
                                     <div class="submenu-item">
                                         <span>{{ child.label }}</span>
                                     </div>
@@ -32,6 +34,13 @@
                         </el-menu-item>
                     </template>
                 </el-menu>
+
+                <!-- 折叠/展开按钮 -->
+                <div class="collapse-btn" @click="clickedCollapseBtn">
+                    <i v-if="!isCollapse" class="el-icon-arrow-left"></i>
+                    <i v-else class="el-icon-arrow-right"></i>
+                </div>
+
             </el-aside>
             <el-main>
                 <!-- 路由占位符 -->
@@ -60,11 +69,16 @@
 .logout-btn {}
 
 .el-aside {
-    background-color: var(--background-color);
+    background-color: #ff0000; //var(--background-color);
+    width: auto;
+    position: relative;
+    border-right: 1px solid #000000;
 }
 
-// .aside-menu {
-// }
+.aside-menu:not(.el-menu--collapse) {
+    width: 240px;
+    //min-height: 800px;
+}
 
 // .el-header h1 {
 //     color: red;
@@ -72,6 +86,7 @@
 
 .el-menu {
     margin-top: 20px;
+    border-right: none;
 }
 
 .el-menu-item-group {
@@ -86,7 +101,7 @@
     margin-top: 20px;
     margin-left: 10px;
     margin-right: 10px;
-    border-radius:30px;
+    border-radius: 30px;
     line-height: 40px;
     height: 40px;
 }
@@ -96,22 +111,24 @@
     margin-top: 20px;
     margin-left: 10px;
     margin-right: 10px;
-    border-radius:30px;
+    border-radius: 30px;
     line-height: 40px;
     height: 40px;
 }
 
 //hover时
 /deep/.el-submenu__title:hover,
-/deep/.el-menu-item:hover { 
-    background-color: var(--hover-color) !important; /* 背景颜色 */
-    color: var(--dark-color); /* 文字颜色 */
+/deep/.el-menu-item:hover {
+    background-color: var(--hover-color) !important;
+    /* 背景颜色 */
+    color: var(--dark-color);
+    /* 文字颜色 */
 }
 
 //选中时
 /deep/.el-menu-item.is-active {
-color: var(--dark-color);
-background-color: var(--selected-color) !important;
+    color: var(--dark-color);
+    background-color: var(--selected-color) !important;
 }
 
 //子菜单展开后的二级菜单项
@@ -120,11 +137,9 @@ background-color: var(--selected-color) !important;
     height: 40px;
 }
 
-
-
-.custom-submenu .el-menu-item {
-    margin-bottom: 0px;
-}
+// .custom-submenu .el-menu-item {
+//     margin-bottom: 0px;
+// }
 
 .menu-item {
     // display: flex;
@@ -155,22 +170,18 @@ background-color: var(--selected-color) !important;
     line-height: normal; // 调整行高
 }
 
-// .submenu-item {
-//     display: flex;
-//     margin-top: 0px;
-//     margin-left: 0px;
-//     /* 上下居中对齐 */
-//     // align-items: center;
-
-
-// }
-
 .submenu-item span {
     // color: var(--dark-color);
     font-size: 18px;
     //white-space: normal; // 允许换行显示
     word-break: break-all; // 英文单词允许拆分显示
     line-height: normal; // 调整行高
+}
+
+.collapse-btn {
+    position: absolute;
+    bottom: 100px;
+    cursor: pointer;
 }
 
 .el-main {
@@ -194,31 +205,33 @@ export default {
             asideMenuData: [
                 {
                     label: "Dashboard",
-                    index: "dashboard",
+                    index: "/dashboard",
                     icon: "el-icon-s-home",
                 },
                 {
                     label: "Cases",
-                    index: "cases",
+                    index: "/cases",
                     icon: "el-icon-s-home",
                 },
                 {
                     label: "Settings",
-                    index: "settings",
+                    index: "/settings",
                     icon: "el-icon-s-tools",
                     children: [
                         {
                             label: "User Management",
-                            index: "user-management",
+                            index: "/user-management",
                         },
                         {
                             label: "Role Management",
-                            index: "role-management",
+                            index: "/role-management",
                         },
                     ],
                 },
             ],
-            activeIndex: "hello", // 默认激活的菜单项
+            activeIndex: "/dashboard", // 默认激活的菜单项
+            isCollapse: false, //侧边栏是否收起
+            asideWidth: "250px",
         };
     },
     computed: {
@@ -229,7 +242,7 @@ export default {
     },
     methods: {
 
-        handleOpen() { 
+        handleOpen() {
             console.log("####handleOpen");
         },
 
@@ -240,9 +253,14 @@ export default {
         handleSelect(key, keyPath) {
             console.log("####handleSelect key: " + key);
             console.log("####handleSelect keyPath: " + keyPath);
-            if(key == 'cases') {
+            if (key == 'cases') {
                 //this.$router.push('/login');这个不是页面内跳转
             }
+        },
+
+        clickedCollapseBtn() {
+            this.isCollapse = !this.isCollapse;
+            this.asideWidth = this.isCollapse ? "80px" : "250px";
         },
 
         logout() {
