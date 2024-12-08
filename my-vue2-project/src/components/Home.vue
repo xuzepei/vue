@@ -7,7 +7,7 @@
         <el-container>
             <el-aside :width="asideWidth">
                 <el-menu class="aside-menu" :default-active="activeIndex" :background-color="$colors.background"
-                    :text-color="$colors.textColor" :active-text-color="$colors.darkColor" :collapse="isCollapse"
+                    :text-color="$colors.grayColor" :active-text-color="$colors.darkColor" :collapse="isCollapse"
                     @open="handleOpen" @close="handleClose" @select="handleSelect" router>
                     <template v-for="item in asideMenuData">
                         <el-submenu class="custom-submenu" :key="item.index" :index="item.index" v-if="item.children">
@@ -72,20 +72,16 @@
     background-color: #ff0000; //var(--background-color);
     width: auto;
     position: relative;
-    border-right: 1px solid #000000;
+    border-right: 0.5px solid #000000;
 }
 
 .aside-menu:not(.el-menu--collapse) {
-    width: 240px;
+    //width: 240px;
     //min-height: 800px;
 }
 
-// .el-header h1 {
-//     color: red;
-// }
-
 .el-menu {
-    margin-top: 20px;
+    margin-top: 10px;
     border-right: none;
 }
 
@@ -104,6 +100,7 @@
     border-radius: 30px;
     line-height: 40px;
     height: 40px;
+    user-select: none;
 }
 
 //有submenu的情况,折叠行
@@ -114,6 +111,7 @@
     border-radius: 30px;
     line-height: 40px;
     height: 40px;
+    user-select: none;
 }
 
 //hover时
