@@ -7,7 +7,8 @@ import axios from 'axios';
 
 // 创建 axios 实例
 const instance = axios.create({
-    baseURL: 'https://dl.freqtek.com:18791/dsd', // 设置默认的 baseURL
+   //baseURL: 'https://dl.freqtek.com:18791/dsd', // 设置默认的 baseURL
+   baseURL: 'https://cn.freqtek.com/dsd', // 设置默认的 baseURL
     timeout: 20000, // 请求超时时间20s
 });
 
