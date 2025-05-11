@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main_container">
         <div class="title-div" v-pre>1. 插值用法 {{}}</div>
         <hr>
         <h1>{{ msg }}</h1>
@@ -20,7 +20,7 @@
 
         <p :class="isDynamicClass">这是个动态class</p>
         <p :class="className">通过指定className来设置css样式</p>
-        <p :style="{ color: dynaimcColor }">这是个动态style</p>
+        <p :style="{ color: dynamicColor }">这是个动态style</p>
         <p :style="myDynamicStyle">这是另一个动态style</p>
 
         <div class="title-div" v-pre>4. v-for</div>
@@ -28,13 +28,14 @@
         <ul>
             <li v-for="item in items" :key="item.id">{{ item.name }}</li>
         </ul>
-        <div class="v-for-row">
-            <span class="v-for-row-item" v-for="(value, index) in items2" :key="index">{{ value }}</span>
+        <div :class="rowOrColumnClass">
+            <span :class="rowOrColumnItemClass" v-for="(value, index) in items2" :key="index">{{ value }}</span>
         </div>
         <div class="v-for-buttons">
             <button @click="clickedReverseBtn">Reverse</button>
             <button @click="clickedSliceBtn">Slice</button>
             <button @click="clickedChangeBtn">{{ isChanged ? "a to i" : "i to a" }}</button>
+            <button @click="clickedChangeRowOrColumnBtn">{{ rowOrColumnBtnName }}</button>
         </div>
 
         <div class="title-div" v-pre>5. v-on 和 @</div>
@@ -144,7 +145,7 @@
         <div class="title-div" v-pre>15. Attribute绑定</div>
         <div :title="msg">鼠标停留在我这里看看</div>
         <div :class="{ beRed: isRed }" @click="toggleRed">动态class, 点击后变红色。</div>
-        <div :style="{ color: dynaimcColor }" @click="toggleColor">动态style,点击后改变颜色</div>
+        <div :style="{ color: dynamicColor }" @click="toggleColor">动态style,点击后改变颜色</div>
         <hr>
         <div class="title-div" v-pre>16. 条件与循环</div>
         <button @click="show = !show">{{ show ? "Hide List" : "Show List" }}</button>
@@ -205,7 +206,7 @@
 
         <div class="title-div" v-pre>20. v-for与对象</div>
         <ul>
-            <li v-for="(value, key, index) in myObject" :key=index>
+            <li v-for="(value, key, index) in myObject" :key="index">
                 {{ index }}. {{ handleKeyInVFor(key) }}: {{ value }}
             </li>
         </ul>
@@ -218,19 +219,19 @@
             <button>Add Todo</button>
         </form>
         <ul>
-            <li v-for="todo in filteredTodos" :key=todo.id>
+            <li v-for="todo in filteredTodos" :key="todo.id">
                 <input type="checkbox" v-model="todo.done">
                 <del v-if="todo.done">{{ todo.id }}. {{ todo.text }}</del>
                 <span v-else>{{ todo.id }}. {{ todo.text }}</span>
                 <button @click="removeTodo(todo)">X</button>
             </li>
         </ul>
-        <button @click="clikcedHideCompletedButton">{{ this.hideCompleted ? "Show all" : "Hide completed"}}</button>
+        <button @click="clickedHideCompletedButton">{{ this.hideCompleted ? "Show all" : "Hide completed" }}</button>
         <hr>
         <div class="title-div" v-pre>22. 生命周期和模板引用</div>
         <p ref="pElementRef">hello</p>
         <div class="title-div" v-pre>23. 侦听器</div>
-        <p>Todo id: {{todoId}}</p>
+        <p>Todo id: {{ todoId }}</p>
         <button @click="todoId++" :disabled="!todoData">Fetch next todo</button>
         <p v-if="!todoData">Loading...</p>
         <pre v-else>{{ todoData }}</pre>
@@ -242,6 +243,10 @@
 </template>
 
 <style>
+.main_container {
+    margin: 20px;
+}
+
 div {
     text-align: left;
 }
@@ -276,9 +281,24 @@ li {
 .v-for-row-item {
     font-size: 32px;
     font-weight: bold;
-    margin-right: 10px;
+    margin-left: 10px;
+    /* 修改这里 */
     background-color: pink;
 }
+
+.v-for-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.v-for-column-item {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    /* 修改这里 */
+    background-color: blue;
+}
+
 
 .v-for-buttons button {
     margin-right: 10px;
@@ -307,7 +327,7 @@ export default {
         this.fetchData()
 
     },
-    created() { 
+    created() {
         console.log('MyHelloWorld has been created!');
 
         // 带参数触发
@@ -341,7 +361,10 @@ export default {
                 green_class: true //这里green_class是class为green_class的css, true表示这个css将生效
             },
             className: "beRed",
-            dynaimcColor: "orange",
+            rowOrColumnClass: "v-for-row",
+            rowOrColumnItemClass: "v-for-row-item",
+            rowOrColumnBtnName: "Row",
+            dynamicColor: "orange",
             myDynamicStyle: { "font-size": "40px", "color": "purple", "text-align": "left" },
             username: "",
             password: "",
@@ -376,6 +399,7 @@ export default {
             hideCompleted: false,
             todoId: 1,
             todoData: null,
+            greetingMsg: '',
         };
     },
     computed: {
@@ -388,10 +412,10 @@ export default {
         greeting: {
             set(value) {
                 console.log("greeting: " + this.value)
-                this.greeting = value
+                this.greetingMsg = value
             },
             get() {
-                return `Hello, ${this.name}!`;
+                return `${this.greetingMsg}!`;
             }
         },
         selectAll: {
@@ -416,7 +440,7 @@ export default {
                 //return this.selectionArray.every(obj => {obj.selected === true});
             }
         },
-        filteredTodos() { 
+        filteredTodos() {
             return this.hideCompleted ? this.todos.filter(t => t.done == false) : this.todos;
         }
     },
@@ -430,7 +454,7 @@ export default {
             this.getAnswer();
         },
 
-        todoId(newValue) { 
+        todoId(newValue) {
             console.log("todoId has changed to " + newValue);
 
             this.fetchData();
@@ -518,6 +542,18 @@ export default {
             }
         },
 
+        clickedChangeRowOrColumnBtn() {
+            if (this.rowOrColumnBtnName == "Row") {
+                this.rowOrColumnClass = "v-for-column";
+                this.rowOrColumnItemClass = "v-for-column-item";
+                this.rowOrColumnBtnName = "Column";
+            } else {
+                this.rowOrColumnClass = "v-for-row";
+                this.rowOrColumnItemClass = "v-for-row-item";
+                this.rowOrColumnBtnName = "Row";
+            }
+        },
+
         handleCheckboxChange() {
             console.log(this.hobbies);
         },
@@ -531,7 +567,7 @@ export default {
         },
 
         toggleColor() {
-            this.dynaimcColor = this.dynaimcColor === 'orange' ? 'blue' : 'orange';
+            this.dynamicColor = this.dynamicColor === 'orange' ? 'blue' : 'orange';
         },
 
         popNumber() {
@@ -576,11 +612,11 @@ export default {
             this.todos = this.todos.filter(t => t.id != todo.id)
         },
 
-        clikcedHideCompletedButton() {
+        clickedHideCompletedButton() {
             this.hideCompleted = !this.hideCompleted;
         },
 
-        async fetchData() { 
+        async fetchData() {
             this.todoData = null
             const res = await fetch(`https://jsonplaceholder.typicode.com/todos/${this.todoId}`)
             this.todoData = await res.json()

@@ -29,7 +29,8 @@ const router = new Router({
                 component: Cases
                 }], redirect: '/dashboard'
         },
-        { path: '/login', name: 'Login', component: Login }
+        { path: '/login', name: 'Login', component: Login },
+        { path: '/demo', name: 'MyHelloWorld', component: MyHelloWorld }
     ]
 })
 
@@ -51,7 +52,7 @@ router.beforeEach((to, from, next) => {
     //要求登录的
     if (to.matched.some(record => record.meta.requireAuth)) {
         if (!isLoggedIn) {
-            //为登录，则需要跳转到登录页
+            //未登录，则需要跳转到登录页
             next({
                 path: "/login",
                 query: { redirect: to.fullPath }
