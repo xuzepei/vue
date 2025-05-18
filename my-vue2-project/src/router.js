@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './components/Login.vue'
-import LoginTest from './components/LoginTest.vue'
 import Home from './components/Home.vue'
 import MyHelloWorld from './components/MyHelloWorld.vue'
+import PortraitMatting from './components/PortraitMatting.vue'
 import HelloWorld from './components/HelloWorld.vue'
 import Dashboard from './components/Dashboard.vue'
 import Cases from './components/Cases.vue'
@@ -30,7 +30,8 @@ const router = new Router({
                 }], redirect: '/dashboard'
         },
         { path: '/login', name: 'Login', component: Login },
-        { path: '/demo', name: 'MyHelloWorld', component: MyHelloWorld }
+        { path: '/demo', name: 'MyHelloWorld', component: MyHelloWorld },
+        { path: '/test', name: 'PortraitMatting', component: PortraitMatting }
     ]
 })
 
