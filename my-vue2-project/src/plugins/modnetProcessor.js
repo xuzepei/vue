@@ -5,9 +5,9 @@ let model = null
 let processor = null
 
 /**
- * 使用 MODNet 模型处理本地图片，返回 alpha mask Blob
+ * 使用 MODNet 模型处理本地图片
  * @param {File|Blob} file 用户上传的本地文件
- * @returns {Promise<Blob>} 返回 alpha mask Blob
+ * @returns {Promise<Blob>} 返回 PNG Blob
  */
 export async function processPortrait(file) {
   if (!model || !processor) {

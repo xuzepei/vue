@@ -1,12 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from './components/Login.vue'
-import Home from './components/Home.vue'
-import MyHelloWorld from './components/MyHelloWorld.vue'
-import PortraitMatting from './components/PortraitMatting.vue'
-import HelloWorld from './components/HelloWorld.vue'
-import Dashboard from './components/Dashboard.vue'
-import Cases from './components/Cases.vue'
+import Login from '@/components/Login.vue'
+import Home from '@/components/Home.vue'
+import MyHelloWorld from '@/components/MyHelloWorld.vue'
+import PortraitMatting from '@/components/PortraitMatting.vue'
+import HelloWorld from '@/components/HelloWorld.vue'
+import Dashboard from '@/components/Dashboard.vue'
+import Cases from '@/components/Cases.vue'
 
 Vue.use(Router)
 
@@ -27,11 +27,11 @@ const router = new Router({
             }, {
                 path: '/cases',
                 component: Cases
-                }], redirect: '/dashboard'
+                }], //redirect: '/dashboard'
         },
         { path: '/login', name: 'Login', component: Login },
         { path: '/demo', name: 'MyHelloWorld', component: MyHelloWorld },
-        { path: '/test', name: 'PortraitMatting', component: PortraitMatting }
+        { path: '/protrait_matting', name: 'PortraitMatting', component: PortraitMatting }
     ]
 })
 
@@ -44,7 +44,6 @@ router.beforeEach((to, from, next) => {
     const accessToken = window.sessionStorage.getItem("AccessToken")
     if (!accessToken) {
         isLoggedIn = false
-
         console.log("isLoggedIn: " + isLoggedIn)
     } else {
         console.log("accessToken: " + accessToken)
@@ -56,7 +55,7 @@ router.beforeEach((to, from, next) => {
             //未登录，则需要跳转到登录页
             next({
                 path: "/login",
-                query: { redirect: to.fullPath }
+                //query: { redirect: to.fullPath }
             })
         } else {
             //已登录，则继续访问

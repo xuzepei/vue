@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <!-- <MyHelloWorld :msgInProps="greeting" @response="fromChildResponse" />
-    <div> {{ childMsg || 'No child msg yet' }}</div> -->
+    <!-- <MyHelloWorld :msgInProps="greeting" @response="fromChildResponse" /> -->
+    <!--<div> {{ childMsg || 'No child msg yet' }}</div> -->
 
     <!-- 路由占位符 -->
     <router-view></router-view>
@@ -11,7 +11,7 @@
 
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
-import MyHelloWorld from './components/MyHelloWorld.vue'
+//import MyHelloWorld from './components/MyHelloWorld.vue'
 
 export default {
   name: 'App',

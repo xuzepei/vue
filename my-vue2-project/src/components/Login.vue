@@ -3,7 +3,7 @@
         <div class="login_box">
             <!-- 头像 -->
             <div class="avatar_box">
-                <img src="../assets/logo.png" alt="">
+                <img src="@/assets/logo.png" alt="">
             </div>
             <!-- 登录表单 -->
             <el-form ref="loginFormRef" class="login_form" label-width="0px" :model="loginForm" :rules="loginFormRules">
@@ -33,7 +33,7 @@
 .login_container {
     width: 100%;
     height: 100%;
-    background-color: #2b4b6b;
+    background-color: var(--login-bg-color);
 
     display: flex;
     flex-direction: row;
@@ -56,20 +56,21 @@
 .avatar_box {
     width: 100px;
     height: 100px;
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     padding: 10px;
-    box-shadow: 0 0 10px #ddd;
+    box-shadow: 0 0 10px var(--shadow-color);
     position: absolute;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff;
+    background-color: white;
 
     img {
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background-color: #eee;
+        background-color: var(--border-color);
+        //max-width: none; /* 取消默认 max-width */
     }
 }
 

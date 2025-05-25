@@ -16,4 +16,8 @@ body,
     --dark-color:#69696D;
     --selected-color:#D3E3FD;
     --hover-color:#EBEEF6;
+    --white-color:#FFFFFF;
+    --shadow-color:#dddddd;
+    --border-color:#eeeeee;
+    --login-bg-color:#2b4b6b;
 }

@@ -11,7 +11,8 @@
   </div>
 </template>
 
-<style>
+<!-- 如果这里不加，scoped 样式，就会影响Login.vue中.avatar_box img -->
+<style lang="less" scoped>
 img {
   max-width: 30%;
   height: auto;
@@ -21,7 +22,7 @@ img {
 <script>
 // ✅ 导入 processPortrait
 import { processPortrait } from '@/plugins/modnetProcessor.js'
-import originalUrl from '../assets/photo.jpg';
+import originalUrl from '@/assets/photo.jpg';
 
 export default {
   data() {

@@ -12,7 +12,7 @@
         <div class="title-div" v-pre>3. v-bind 和 :</div>
         <hr>
         <img :src="adsImagePath" :width="width" height="100">
-        <!-- <img src="../assets/test.png" width="100" height="100"> -->
+        <!-- <img src="@/assets/test.png" width="100" height="100"> -->
 
         <button :disabled="isBtnDisabled">Button</button>
 
@@ -100,8 +100,8 @@
         </div>
         <div>
             <span>性别: </span>
-            <input type="radio" v-model="gender" value="male" />男
-            <input type="radio" v-model="gender" value="female" />女
+            <input type="radio" v-model="gender" value="male" @change="handleRadioChange"/>男
+            <input type="radio" v-model="gender" value="female" @change="handleRadioChange"/>女
         </div>
         <div>
             <span>点赞数量: </span>
@@ -239,6 +239,7 @@
         <div class="title-div" v-pre>24. 子组件可以通过 props 从父组件接受动态数据</div>
         <div>{{ msgInProps || 'No props passed yet' }}</div>
         <div class="title-div" v-pre>25. 子组件可以通过 Emits 可以向父组件触发事件</div>
+        <button @click="handleEmit">Emit event</button>
     </div>
 </template>
 
@@ -315,8 +316,7 @@ li {
 </style>
 
 <script>
-// import HelloWorld from './HelloWorld.vue';
-import testImagePath from '../assets/ads.jpg';
+import testImagePath from '@/assets/ads.jpg';
 
 let todoIndex = 0;
 
@@ -342,7 +342,7 @@ export default {
             msg: "Hello, Vue!",
             name: "Vue",
             isShow: true,
-            adsImagePath: testImagePath,
+            adsImagePath: testImagePath, // '@/assets/ads.jpg',这样不行, 需要用import引入
             width: 50,
             items: [
                 { id: 1, name: "item1" },
@@ -424,7 +424,7 @@ export default {
                 this.selectionArray.forEach(obj => { obj.selected = value });
             },
             get() {
-                var selected = true
+                let selected = true
                 let outsideVar = 0
                 this.selectionArray.forEach((obj, index) => {
                     console.log(index + ". obj.selected is: " + obj.selected)
@@ -436,7 +436,7 @@ export default {
 
                 console.log("selected: " + selected);
                 console.log("outsideVar: " + outsideVar);
-                return selected
+                return outsideVar >= 3
                 //return this.selectionArray.every(obj => {obj.selected === true});
             }
         },
@@ -447,8 +447,8 @@ export default {
     watch: {
         // 监听 question 属性
         question(newValue, oldValue) {
-            console.log(newValue);
-            console.log(oldValue);
+            console.log("question: newValue: " + newValue);
+            console.log("question: oldValue: " + oldValue);
 
             this.answer = '...';
             this.getAnswer();
@@ -462,6 +462,11 @@ export default {
     },
     methods: {
 
+        //这里的this指向当前组件实例
+        handleEmit() {
+            console.log("handleEmit");
+            this.$emit('response', 'Hello from child')
+        },
         scrollToBottom() {
             window.scrollTo({
                 top: document.documentElement.scrollHeight,
@@ -555,7 +560,11 @@ export default {
         },
 
         handleCheckboxChange() {
-            console.log(this.hobbies);
+            console.log("hobbies: " + this.hobbies);
+        },
+        
+        handleRadioChange() {
+            console.log("gender: " + this.gender);
         },
 
         handleEnter() {
