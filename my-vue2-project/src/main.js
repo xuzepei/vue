@@ -2,8 +2,6 @@ import Vue from 'vue'
 import App from '@/App.vue'
 import router from '@/router'
 
-
-
 //导入iconfont
 import '@/assets/iconfont/iconfont.css'
 
@@ -17,7 +15,11 @@ import "@/plugins/element-ui.js"
 import '@/plugins/tool.js'
 
 //引入刚才创建的 axios 实例
-import '@/plugins/axios'
+import '@/plugins/HttpRequest'
+
+//引入正则表达式工具
+import { Regex } from '@/plugins/regex.js';
+Vue.prototype.$regex = Regex;
 
 //将颜色变量挂载到全局属性
 import colors from '@/plugins/colors';

@@ -21,3 +21,9 @@ body,
     --border-color:#eeeeee;
     --login-bg-color:#2b4b6b;
 }
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

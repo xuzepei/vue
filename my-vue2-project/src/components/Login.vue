@@ -6,15 +6,15 @@
                 <img src="@/assets/logo.png" alt="">
             </div>
             <!-- 登录表单 -->
-            <el-form ref="loginFormRef" class="login_form" label-width="0px" :model="loginForm" :rules="loginFormRules">
+            <el-form ref="loginFormRef" class="login_form" label-width="0px" :model="loginFormData" :rules="loginFormRules">
                 <!-- 用户名 -->
                 <el-form-item prop="username">
-                    <el-input v-model="loginForm.username" prefix-icon="iconfont icon-yonghu"
+                    <el-input v-model="loginFormData.username" prefix-icon="iconfont icon-yonghu"
                         placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <!-- 密码 -->
                 <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" placeholder="请输入密码"
+                    <el-input v-model="loginFormData.password" prefix-icon="iconfont icon-mima" placeholder="请输入密码"
                         type="password"></el-input>
                 </el-form-item>
                 <!-- 按钮区 -->
@@ -48,14 +48,14 @@
     position: relative;
     width: 400px;
     height: 300px;
-    box-shadow: 0 0 20px rgba(0, 0, 255, 255);
+    box-shadow: 0 0 20px var(--shadow-color);
     border-radius: 8px;
     background-color: white;
 }
 
 .avatar_box {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     border: 1px solid var(--border-color);
     border-radius: 50%;
     padding: 10px;
@@ -75,15 +75,16 @@
 }
 
 .login_form {
+    // background: #ff0000;
     position: absolute;
     bottom: 0;
     width: 100%;
     padding: 0 20px;
-    box-sizing: border-box;
 }
 
 .buttons {
     display: flex;
+    flex-direction: row;
     justify-content: flex-end;
 }
 </style>
@@ -101,35 +102,11 @@
 
 <script>
 
-const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-function isDev() { 
-    if (process.env.NODE_ENV === 'development') {
-        return true;
-    }
-
-    return false;
-}
-
 export default {
     data() {
-        var validateUsername = (rule, value, callback) => {
-            console.log("validateUsername: value:" + value);
-
-            //判断是否为开发环境
-            if (isDev()) {
-                callback();
-            } else {
-                if (!emailRegex.test(value)) {
-                    callback(new Error('请输入有效的邮箱地址！'));
-                } else {
-                    callback();
-                }
-            }
-        };
-
         return {
             //登录表单数据绑定对象
-            loginForm: {
+            loginFormData: {
                 username: this.$isDev() ? "TestLabCN":"",
                 password: this.$isDev() ? "cntestfreqty" : "",
             },
@@ -137,7 +114,7 @@ export default {
                 username: [
                     { required: true, message: '请输入登录用户名', trigger: 'blur' }, //trigger:blur(失去焦点), submit(点击submit) 
                     { min: 3, max: 255, message: "长度在3到255个字符", trigger: 'blur' },
-                    { validator: validateUsername, trigger: 'submit' }
+                    { validator: this.validateUsername, trigger: 'submit' }
                 ],
                 password: [
                     { required: true, message: '请输入登录密码', trigger: 'change' },
@@ -149,9 +126,26 @@ export default {
         }
     },
     methods: {
+
+        validateUsername(rule, value, callback) {
+            console.log("validateUsername: value:" + value);
+
+            //判断是否为开发环境
+            if (this.$isDev()) {
+                callback();
+            } else {
+                if (!this.$regex.email.test(value)) {
+                    callback(new Error('请输入有效的邮箱地址！'));
+                } else {
+                    callback();
+                }
+            }
+        },
+
         resetLoginForm() {
             this.$refs.loginFormRef.resetFields();
         },
+
         login() {
 
             if (this.$isClickable() === false) { 
@@ -172,11 +166,13 @@ export default {
                 }
             });
         },
+
         async request() {
             this.isRequesting = true;
+            
             try {
                 // 使用 this.$http 调用
-                const response = await this.$http.post('/token', this.loginForm);
+                const response = await this.$http.post('/token', this.loginFormData);
                 
                 console.log("response.statue:" + response.status);
                 this.isRequesting = false;
@@ -217,7 +213,7 @@ export default {
                 console.error(e);
                 this.$message.error(e);
             } finally {
-                //this.loading = false;
+                this.isRequesting = false;
             }
         },
     }
