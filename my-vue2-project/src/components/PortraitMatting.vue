@@ -73,7 +73,7 @@ img {
 
 <script>
 // ✅ 导入 processPortrait
-import { processPortrait } from '@/plugins/ModnetProcessor.js'
+import { processPortrait } from '@/plugins/ModnetProcessor1.js'
 import originalUrl from '@/assets/photo.jpg';
 
 export default {
