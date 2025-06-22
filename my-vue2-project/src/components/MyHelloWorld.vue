@@ -363,7 +363,7 @@ export default {
             className: "beRed",
             rowOrColumnClass: "v-for-row",
             rowOrColumnItemClass: "v-for-row-item",
-            rowOrColumnBtnName: "Row",
+            rowOrColumnBtnName: "Column",
             dynamicColor: "orange",
             myDynamicStyle: { "font-size": "40px", "color": "purple", "text-align": "left" },
             username: "",
@@ -477,6 +477,7 @@ export default {
         changeMsg() {
             this.msg = "Hello, World!";
             this.question = "Is this a question?"
+            this.greetingMsg = "Hello, Vue.js";
         },
 
 
@@ -548,14 +549,14 @@ export default {
         },
 
         clickedChangeRowOrColumnBtn() {
-            if (this.rowOrColumnBtnName == "Row") {
+            if (this.rowOrColumnBtnName == "Column") {
                 this.rowOrColumnClass = "v-for-column";
                 this.rowOrColumnItemClass = "v-for-column-item";
-                this.rowOrColumnBtnName = "Column";
+                this.rowOrColumnBtnName = "Row";
             } else {
                 this.rowOrColumnClass = "v-for-row";
                 this.rowOrColumnItemClass = "v-for-row-item";
-                this.rowOrColumnBtnName = "Row";
+                this.rowOrColumnBtnName = "Column";
             }
         },
 
@@ -612,6 +613,11 @@ export default {
 
         addTodo() {
             if (this.newTodo.length > 0) {
+                if (this.todos.some(t => t.text === this.newTodo)) {
+                    alert("Todo already exists!");
+                    return;
+                }
+                
                 todoIndex = this.todos.length
                 this.todos.push({ id: todoIndex, text: this.newTodo })
             }

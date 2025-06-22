@@ -6,7 +6,8 @@
                 <img src="@/assets/logo.png" alt="">
             </div>
             <!-- 登录表单 -->
-            <el-form ref="loginFormRef" class="login_form" label-width="0px" :model="loginFormData" :rules="loginFormRules">
+            <el-form ref="loginFormRef" class="login_form" label-width="0px" :model="loginFormData"
+                :rules="loginFormRules">
                 <!-- 用户名 -->
                 <el-form-item prop="username">
                     <el-input v-model="loginFormData.username" prefix-icon="iconfont icon-yonghu"
@@ -41,7 +42,7 @@
     justify-content: center;
     /* 交叉轴方向上的对齐方式 */
     align-items: center;
-    
+
 }
 
 .login_box {
@@ -75,7 +76,7 @@
 }
 
 .login_form {
-    // background: #ff0000;
+    //background: #ff0000;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -102,12 +103,15 @@
 
 <script>
 
+import { loginToolShared } from "@/plugins/login.js";
+import Errors from "@/plugins/errors.js";
+
 export default {
     data() {
         return {
             //登录表单数据绑定对象
             loginFormData: {
-                username: this.$isDev() ? "TestLabCN":"",
+                username: this.$isDev() ? "TestLabCN" : "",
                 password: this.$isDev() ? "cntestfreqty" : "",
             },
             loginFormRules: {
@@ -148,17 +152,56 @@ export default {
 
         login() {
 
-            if (this.$isClickable() === false) { 
+            const onSuccess = (tokenInfo) => {
+
+                this.isRequesting = false;
+
+                this.tokenInfo = tokenInfo;
+                window.sessionStorage.setItem("AccessToken", tokenInfo.AccessToken);
+                window.sessionStorage.setItem("ExpiresIn", tokenInfo.ExpiresIn);
+                window.sessionStorage.setItem("RefreshToken", tokenInfo.RefreshToken);
+
+                const msg = "Login succeeded!";
+                console.log(msg);
+                this.$message.success(msg);
+                //this.$router.push("/");
+            };
+
+            const onError = (errorCode) => {
+
+                this.isRequesting = false;
+
+                const error = Errors.getLoginError(errorCode);
+                console.error("Login failed: ", error);
+                this.$message.error("登录失败：" + error);
+            };
+
+            if (this.$isClickable() === false) {
                 console.log("Not clickable!!!");
                 return false;
             }
 
             this.$refs.loginFormRef.validate((valid) => {
-
                 console.log("valid:" + valid);
 
                 if (valid) {
-                    this.request();
+
+                    if (this.isRequesting) {
+                        console.log("Already requesting, please wait...");
+                        return false;
+                    }
+
+                    this.isRequesting = true;
+
+                    loginToolShared.login(
+                        this.loginFormData.username,
+                        this.loginFormData.password,
+                        null,
+                        1,
+                        onSuccess,
+                        onError,
+                    )
+
                     return true;
                 } else {
                     console.log("error submit!!");
@@ -169,14 +212,14 @@ export default {
 
         async request() {
             this.isRequesting = true;
-            
+
             try {
                 // 使用 this.$http 调用
                 const response = await this.$http.post('/token', this.loginFormData);
-                
+
                 console.log("response.statue:" + response.status);
                 this.isRequesting = false;
-                
+
                 if (response.status === 200) {
                     const contentType = response.headers['content-type'];
                     if (contentType && contentType.includes('application/json')) {
@@ -184,8 +227,8 @@ export default {
                         console.log(response.data);
 
                         if (response.data.success === true) {
-                            if (response.data.data != null) { 
-                                this.tokenInfo = response.data.data.content;
+                            if (response.data.data != null) {
+                                this.tokenInfo = response.data.data;
                                 window.sessionStorage.setItem("AccessToken", this.tokenInfo.AccessToken);
                                 window.sessionStorage.setItem("ExpiresIn", this.tokenInfo.ExpiresIn);
                                 window.sessionStorage.setItem("RefreshToken", this.tokenInfo.RefreshToken);

@@ -7,6 +7,16 @@ body,
     background-color: white;
 }
 
+/* 所有元素（包括伪元素）在计算宽度和高度时，包括了 padding 和 border，不会超出你设置的尺寸。 */
+html {
+  box-sizing: border-box;
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 /* 全局颜色 */
 :root {
     --primary-color: #42A5F5;
@@ -20,10 +30,4 @@ body,
     --shadow-color:#dddddd;
     --border-color:#eeeeee;
     --login-bg-color:#2b4b6b;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
 }

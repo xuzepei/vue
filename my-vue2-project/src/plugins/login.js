@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { urlConfigShared } from '@/plugins/UrlConfig.js';
 
 class LoginTool {
+
   constructor(baseURL = '/') {
     this.http = axios.create({
       baseURL,
-      timeout: 10000,
+      timeout: 20000,
       headers: {
         'Content-Type': 'application/json'
       }
@@ -12,22 +14,56 @@ class LoginTool {
   }
 
   async login(username, password, captcha, mode, onSuccess, onError) {
-    try {
-      const response = await this.http.post('/token', data);
 
-      if (response.status === 200 && response.headers['content-type']?.includes('application/json')) {
-        if (response.data.success && response.data.data) {
-          onSuccess?.(response.data.data.content);
-        } else {
-          onError?.(response.data.errorMessage || '登录失败');
-        }
-      } else {
-        onError?.('请求失败：非200响应');
+    try {
+
+      var dataBody = {}
+      dataBody.username = username;
+      if (password) {
+        dataBody.password = password;
+      } else if (captcha) {
+        dataBody.code = captcha;
       }
+      dataBody.loginModule = mode;
+      console.log("dataBody: " + JSON.stringify(dataBody, null, 2));
+
+      const urlString = urlConfigShared.userTokenUrl();
+      console.log("urlString: " + urlString);
+
+      const response = await this.http.post(urlString, dataBody);
+      console.log("response.statue: " + response.status);
+
+      if (
+        response.status === 200 &&
+        response.headers['content-type']?.includes('application/json') &&
+        response.data.success &&
+        response.data.data
+      ) {
+        const dict = response.data.data;
+        console.log(JSON.stringify(dict, null, 2));
+
+        if (dict.code === 0) {
+          onSuccess?.(dict);
+        } else {
+          if (dict.code === -5) {
+            this.login(username, password, captcha, 0, onSuccess, onError);
+          } else if (dict.code === -7) {
+            onError?.(-7); // 用户名密码错误
+          } else {
+            onError?.(dict.code);
+          }
+        }
+
+        return;
+      }
+
+      console.error(response.data.errorMessage);
+
     } catch (err) {
       console.error(err);
-      onError?.('网络请求错误');
     }
+
+    onError?.(-100); // 通用错误码
   }
 
 }

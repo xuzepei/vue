@@ -9,4 +9,4 @@ class User {
   }
 }
 
-export const user_shared = new User();
+export const userShared = new User();

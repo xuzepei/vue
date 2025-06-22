@@ -17,6 +17,8 @@ import '@/plugins/tool.js'
 //引入刚才创建的 axios 实例
 import '@/plugins/HttpRequest'
 
+import { urlConfigShared } from '@/plugins/UrlConfig.js';
+
 //引入正则表达式工具
 import { Regex } from '@/plugins/regex.js';
 Vue.prototype.$regex = Regex;
@@ -24,6 +26,9 @@ Vue.prototype.$regex = Regex;
 //将颜色变量挂载到全局属性
 import colors from '@/plugins/colors';
 Vue.prototype.$colors = colors;
+
+// 在Vue实例创建前调用
+urlConfigShared.fetchAPIHostUrl(Vue.prototype.$http);
 
 //生产环境下不产生控制台提示
 Vue.config.productionTip = false
