@@ -1,14 +1,20 @@
 import Vue from 'vue'
 
-//import { ElementUI } from 'element-ui'
-import { Button, Form, FormItem, Input, Message, Container, Header, Aside, Main, Menu, Submenu, MenuItemGroup, MenuItem } from 'element-ui'
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css'
+// Vue.use(ElementUI)
+
+import { Button, Form, FormItem, Input, Message, Container, Header, Aside, Main, Menu, Submenu, MenuItemGroup, MenuItem, Select, Option, Link} from 'element-ui'
 
 //表单相关
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
+Vue.use(Select)
+Vue.use(Option)
 
+Vue.use(Link)
 
 //布局相关
 Vue.use(Container)

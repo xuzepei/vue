@@ -18,11 +18,26 @@
                     <el-input v-model="loginFormData.password" prefix-icon="iconfont icon-mima" placeholder="请输入密码"
                         type="password"></el-input>
                 </el-form-item>
-                <!-- 按钮区 -->
-                <el-form-item label="" class="buttons">
-                    <el-button type="primary" @click="login" :loading="isRequesting">登录</el-button>
-                    <el-button @click="resetLoginForm">重置</el-button>
-                </el-form-item>
+
+                <div class="login_form_bottom">
+                    <!-- 区域选择 -->
+                    <el-select v-model="region" placeholder="Please select" class="select_area">
+                        <el-option v-for="item in regionOptions" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+
+                    <!-- 按钮区 -->
+                    <el-form-item label="" class="buttons">
+                        <el-button type="primary" @click="login" :loading="isRequesting">登录</el-button>
+                        <el-button @click="resetLoginForm">重置</el-button>
+                    </el-form-item>
+                </div>
+
+                <div class="select_tip">
+                    <img src="@/assets/tip2.png" alt="Region Selection">
+                    <span>How to select?</span>
+                </div>
+
             </el-form>
         </div>
     </div>
@@ -83,10 +98,24 @@
     padding: 0 20px;
 }
 
+.login_form_bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.select_area {
+    height: 64px; // 让select高度与按钮一致
+    min-width: 140px;
+}
+
 .buttons {
+    height: 84px; // 让按钮高度与select一致
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
 }
 </style>
 
@@ -99,6 +128,26 @@
 .icon-mima {
     margin-left: 3px;
 }
+
+.select_tip {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    img {
+        width: 26px;
+        height: 26px;
+    }
+
+    span {
+        margin-left: 6px;
+        font-size: 14px;
+        color: var(--system-blue);
+        text-decoration: underline;
+    }
+}
+
 </style>
 
 <script>
@@ -125,6 +174,8 @@ export default {
                     { min: 6, max: 15, message: "长度在6到15个字符", trigger: 'change' },
                 ],
             },
+            regionOptions: [{label: "China Mainland", value: "cn"}, {label: "Europe", value: "eu"}, {label: "India", value: "in"}, {label: "Global", value: "en"}],
+            region: "",
             isRequesting: false,
             tokenInfo: null,
         }
