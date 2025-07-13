@@ -21,20 +21,20 @@
 
                 <div class="login_form_bottom">
                     <!-- 区域选择 -->
-                    <el-select v-model="region" placeholder="Please select" class="select_area">
+                    <el-select v-model="region" placeholder="Region" class="select_area">
                         <el-option v-for="item in regionOptions" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
 
                     <!-- 按钮区 -->
                     <el-form-item label="" class="buttons">
-                        <el-button type="primary" @click="login" :loading="isRequesting">登录</el-button>
+                        <el-button class="login_btn" type="primary" @click="login" :loading="isRequesting">登录</el-button>
                         <el-button @click="resetLoginForm">重置</el-button>
                     </el-form-item>
                 </div>
 
                 <div class="select_tip">
-                    <img src="@/assets/tip2.png" alt="Region Selection">
+                    <img src="@/assets/tip2.png" alt="tip image">
                     <span>How to select?</span>
                 </div>
 
@@ -61,9 +61,10 @@
 }
 
 .login_box {
+    margin: 10px;
     position: relative;
-    width: 400px;
-    height: 300px;
+    width: 460px;
+    height: 320px;
     box-shadow: 0 0 20px var(--shadow-color);
     border-radius: 8px;
     background-color: white;
@@ -102,21 +103,45 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: top;
 }
 
 .select_area {
-    height: 64px; // 让select高度与按钮一致
-    min-width: 140px;
+    flex: 1;
+    height: 44px; // 让select高度与按钮一致
+    //background: #ff00ff;
 }
 
 .buttons {
-    height: 84px; // 让按钮高度与select一致
+    //flex: 2;
+    gap: 20px;
+    height: 100%; // 让按钮高度与select一致
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
 }
+
+.select_tip {
+    margin-top: -10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    img {
+        width: 24px;
+        height: 24px;
+    }
+
+    span {
+        margin-left: 6px;
+        font-size: 14px;
+        color: var(--system-blue);
+        text-decoration: underline;
+    }
+}
+
 </style>
 
 <!-- 非 scoped 的样式，全局生效 -->
@@ -127,25 +152,6 @@
 
 .icon-mima {
     margin-left: 3px;
-}
-
-.select_tip {
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    
-    img {
-        width: 26px;
-        height: 26px;
-    }
-
-    span {
-        margin-left: 6px;
-        font-size: 14px;
-        color: var(--system-blue);
-        text-decoration: underline;
-    }
 }
 
 </style>
@@ -174,7 +180,7 @@ export default {
                     { min: 6, max: 15, message: "长度在6到15个字符", trigger: 'change' },
                 ],
             },
-            regionOptions: [{label: "China Mainland", value: "cn"}, {label: "Europe", value: "eu"}, {label: "India", value: "in"}, {label: "Global", value: "en"}],
+            regionOptions: [{label: "Mainland China", value: "cn"}, {label: "Europe", value: "eu"}, {label: "India", value: "in"}, {label: "Global", value: "en"}],
             region: "",
             isRequesting: false,
             tokenInfo: null,
