@@ -10,11 +10,11 @@ class UrlConfig {
     ];
 
     getBaseUrl() {
-        const region = userShared.region;
+        const region = userShared.getRegion();
         const default_base_url = this.baseUrlList[0].url;
 
         if (!region) {
-            return default_base_url;
+            return "";
         }
 
         const match = this.baseUrlList.find(item => item.region === region);
@@ -22,6 +22,11 @@ class UrlConfig {
     }
 
     async fetchAPIHostUrl(axiosInstance) {
+
+        if (!userShared.getRegion()) {
+            console.warn("No region selected, can not fetch API host URL.");
+            return;
+        }
 
         const urlString = this.getBaseUrl() + "/common/services";
 
@@ -32,6 +37,7 @@ class UrlConfig {
             console.log("response.statue: " + response.status);
 
             if (response.status === 200) {
+
                 const contentType = response.headers['content-type'];
                 if (contentType && contentType.includes('application/json')) {
 
@@ -48,6 +54,7 @@ class UrlConfig {
                         console.log("errorMessage: " + response.data.errorMessage);
                     }
                 }
+
             }
 
             const msg = 'Get API host URL failed: ' + response.statusText;
@@ -59,7 +66,7 @@ class UrlConfig {
     }
 
     saveAPIHostUrlByRegion(dict) {
-        const region = userShared.region;
+        const region = userShared.getRegion();
         if (!region) {
             return;
         }
@@ -69,7 +76,7 @@ class UrlConfig {
     }
 
     getAPIHostUrlByRegion() {
-        const region = userShared.region;
+        const region = userShared.getRegion();
         if (!region) {
             return null;
         }
@@ -90,23 +97,19 @@ class UrlConfig {
     }
 
     getAPIHostByKey(key) {
-        const region = userShared.region;
-        if (!region) {
-            return null;
-        }
 
-        const dict = this.getAPIHostUrlByRegion();
-        if (!dict) {
-            return null;
-        }
-
-        for (const temp of Object.keys(dict)) {
-            if (temp.toLowerCase() === key) {
-                return dict[temp];
+        if (userShared.getRegion) {
+            const dict = this.getAPIHostUrlByRegion();
+            if (dict) {
+                for (const temp of Object.keys(dict)) {
+                    if (temp.toLowerCase() === key) {
+                        return dict[temp];
+                    }
+                }
             }
         }
 
-        return null;
+        return "";
     }
 
     userTokenUrl() {

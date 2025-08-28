@@ -21,22 +21,45 @@
 
                 <div class="login_form_bottom">
                     <!-- 区域选择 -->
-                    <el-select v-model="region" placeholder="Region" class="select_area">
-                        <el-option v-for="item in regionOptions" :key="item.value" :label="item.label" :value="item.value">
+                    <el-select v-model="region" placeholder="Select Region" class="select_area" @change="onRegionChange" :disabled="requestingHostUrl">
+                        <el-option v-for="item in regionOptions" :key="item.value" :label="item.label"
+                            :value="item.value">
                         </el-option>
                     </el-select>
 
                     <!-- 按钮区 -->
-                    <el-form-item label="" class="buttons">
-                        <el-button class="login_btn" type="primary" @click="login" :loading="isRequesting">登录</el-button>
+                    <el-form-item class="buttons">
+                        <el-button class="login_btn" type="primary" @click="login"
+                            :loading="isRequesting">登录</el-button>
                         <el-button @click="resetLoginForm">重置</el-button>
                     </el-form-item>
                 </div>
 
-                <div class="select_tip">
+                <!-- 使用自定义指令v-popover -->
+                <!-- <div class="select_tip" v-popover:selectTipPopover>
                     <img src="@/assets/tip2.png" alt="tip image">
                     <span>How to select?</span>
-                </div>
+                </div> -->
+
+                <!-- selectTipPopover 本体 -->
+                <!-- <el-popover ref="selectTipPopover" placement="bottom" width="300" trigger="click">
+                    <p class="tip-content">
+                        <i class="el-icon-info tip-icon"></i>
+                        为了遵守适用于欧洲地区的严格数据保护和隐私法规，如果您当前位于该地区，请选择「欧洲」。
+                    </p>
+                </el-popover> -->
+
+                <!-- 使用 slot="reference" 的具名插槽 -->
+                <el-popover placement="bottom" width="300" trigger="click">
+                    <p class="tip-content">
+                        <i class="el-icon-info tip-icon"></i>
+                        为了遵守适用于欧洲地区的严格数据保护和隐私法规，如果您当前位于该地区，请选择「欧洲」。
+                    </p>
+                    <div class="select_tip" slot="reference">
+                        <img src="@/assets/tip2.png" alt="tip image">
+                        <span>How to select?</span>
+                    </div>
+                </el-popover>
 
             </el-form>
         </div>
@@ -61,7 +84,7 @@
 }
 
 .login_box {
-    margin: 10px;
+    //margin: 10px;
     position: relative;
     width: 460px;
     height: 320px;
@@ -100,6 +123,7 @@
 }
 
 .login_form_bottom {
+    margin-bottom: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -107,27 +131,42 @@
 }
 
 .select_area {
-    flex: 1;
+    flex: 3;
     height: 44px; // 让select高度与按钮一致
-    //background: #ff00ff;
+    max-width: 200px;
+}
+
+// 选中状态颜色
+.el-select-dropdown__item.selected {
+    background-color: #fdd835 !important;
+    color: #000 !important;
+}
+
+// hover状态颜色
+.el-select-dropdown__item:hover {
+  background-color: #fff9c4 !important;
+  color: #000 !important;
 }
 
 .buttons {
-    //flex: 2;
-    gap: 20px;
+    flex: 2;
+    //gap: 20px;
     height: 100%; // 让按钮高度与select一致
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
+    //background: turquoise;
 }
 
 .select_tip {
+    display: inline-flex; // inline-flex 让宽度包裹内容
     margin-top: -10px;
     margin-bottom: 30px;
-    display: flex;
     flex-direction: row;
     align-items: center;
+    cursor:pointer;
+    
     
     img {
         width: 24px;
@@ -140,6 +179,19 @@
         color: var(--system-blue);
         text-decoration: underline;
     }
+}
+
+.tip-content {
+  display: flex;
+  align-items: top;
+  line-height: 1.4;
+}
+
+/* 图标样式 */
+.tip-icon {
+  font-size: 20px;
+  color: var(--tip-blue);
+  margin-right: 6px;
 }
 
 </style>
@@ -160,8 +212,19 @@
 
 import { loginToolShared } from "@/plugins/login.js";
 import Errors from "@/plugins/errors.js";
+import { urlConfigShared } from '@/plugins/UrlConfig.js';
+import { userShared } from '@/plugins/User.js';
 
 export default {
+    mounted() {
+        console.log('Login component has been mounted!');
+
+        //初始化区域选择
+        this.region = userShared.getRegion();
+        if (this.region) {
+            //this.onRegionChange(this.region);
+        }
+    },
     data() {
         return {
             //登录表单数据绑定对象
@@ -184,6 +247,7 @@ export default {
             region: "",
             isRequesting: false,
             tokenInfo: null,
+            requestingHostUrl: false, //是否正在请求HostUrl
         }
     },
     methods: {
@@ -205,6 +269,22 @@ export default {
 
         resetLoginForm() {
             this.$refs.loginFormRef.resetFields();
+        },
+
+        async onRegionChange(value) {
+            console.log("Selected region: " + value);
+
+            //更新全局的用户区域
+            userShared.saveRegion(value);
+
+            this.requestingHostUrl = true;
+            //根据选择的区域，更新API请求的HostUrl
+            try {
+                await urlConfigShared.fetchAPIHostUrl(this.$http);
+            } finally {
+                this.requestingHostUrl = false;
+            }
+            
         },
 
         login() {
@@ -230,12 +310,25 @@ export default {
 
                 const error = Errors.getLoginError(errorCode);
                 console.error("Login failed: ", error);
-                this.$message.error("登录失败：" + error);
+                this.$message.error("Login failed: " + error);
             };
 
+            //防止重复点击
             if (this.$isClickable() === false) {
                 console.log("Not clickable!!!");
                 return false;
+            }
+
+            //等待请求HostUrl完成
+            if (this.requestingHostUrl) {
+                this.$message.warning('Still requesting host URL, please wait a moment!');
+                return;
+            }
+
+            //检查是否选择了区域
+            if (!this.region) {
+                this.$message.warning('Please select an operational region first!')
+                return
             }
 
             this.$refs.loginFormRef.validate((valid) => {
