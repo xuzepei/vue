@@ -16,12 +16,19 @@
                 <!-- 密码 -->
                 <el-form-item prop="password">
                     <el-input v-model="loginFormData.password" prefix-icon="iconfont icon-mima" placeholder="请输入密码"
-                        type="password"></el-input>
+                        :type="showPassword ? 'text' : 'password'">
+                        <!-- 尾部图标 -->
+                        <template slot="suffix">
+                            <img :src="showPassword ? require('@/assets/open-eye.png') : require('@/assets/close-eye.png')"
+                                @click="togglePassword" class="eye_password" />
+                        </template>
+                    </el-input>
                 </el-form-item>
 
                 <div class="login_form_bottom">
                     <!-- 区域选择 -->
-                    <el-select v-model="region" placeholder="Select Region" class="select_area" @change="onRegionChange" :disabled="requestingHostUrl">
+                    <el-select v-model="region" placeholder="Select Region" class="select_area" @change="onRegionChange"
+                        :disabled="requestingHostUrl || isRequesting">
                         <el-option v-for="item in regionOptions" :key="item.value" :label="item.label"
                             :value="item.value">
                         </el-option>
@@ -120,10 +127,20 @@
     bottom: 0;
     width: 100%;
     padding: 0 20px;
+    //background: #fdd835;
+}
+
+.eye_password {
+    //background: turquoise;
+    margin: 6px;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
 }
 
 .login_form_bottom {
-    margin-bottom: 20px;
+    //margin-bottom: 20px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -160,9 +177,10 @@
 }
 
 .select_tip {
+    //background: #f00;
     display: inline-flex; // inline-flex 让宽度包裹内容
-    margin-top: -10px;
-    margin-bottom: 30px;
+    margin-top: 0px;
+    margin-bottom: 20px;
     flex-direction: row;
     align-items: center;
     cursor:pointer;
@@ -229,8 +247,8 @@ export default {
         return {
             //登录表单数据绑定对象
             loginFormData: {
-                username: this.$isDev() ? "TestLabCN" : "",
-                password: this.$isDev() ? "cntestfreqty" : "",
+                username: this.$isDev() ? "" : "",
+                password: this.$isDev() ? "" : "",
             },
             loginFormRules: {
                 username: [
@@ -248,9 +266,15 @@ export default {
             isRequesting: false,
             tokenInfo: null,
             requestingHostUrl: false, //是否正在请求HostUrl
+            showPassword: false, // 是否显示密码
         }
     },
     methods: {
+
+
+        togglePassword() {
+            this.showPassword = !this.showPassword;
+        },
 
         validateUsername(rule, value, callback) {
             console.log("validateUsername: value:" + value);
@@ -268,6 +292,7 @@ export default {
         },
 
         resetLoginForm() {
+            console.log("resetLoginForm");
             this.$refs.loginFormRef.resetFields();
         },
 
