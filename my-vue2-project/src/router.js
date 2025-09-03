@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
     console.log("Check if it is logged in...")
 
     let isLoggedIn = true
-    const accessToken = window.sessionStorage.getItem("AccessToken")
+    const accessToken = localStorage.getItem("AccessToken") //window.sessionStorage.getItem("AccessToken")
     if (!accessToken) {
         isLoggedIn = false
         console.log("isLoggedIn: " + isLoggedIn)

@@ -319,14 +319,13 @@ export default {
                 this.isRequesting = false;
 
                 this.tokenInfo = tokenInfo;
-                window.sessionStorage.setItem("AccessToken", tokenInfo.AccessToken);
-                window.sessionStorage.setItem("ExpiresIn", tokenInfo.ExpiresIn);
-                window.sessionStorage.setItem("RefreshToken", tokenInfo.RefreshToken);
+                loginToolShared.saveLoginInfo(tokenInfo)
+
 
                 const msg = "Login succeeded!";
                 console.log(msg);
                 this.$message.success(msg);
-                //this.$router.push("/");
+                this.$router.push("/");
             };
 
             const onError = (errorCode) => {

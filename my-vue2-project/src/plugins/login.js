@@ -66,6 +66,20 @@ class LoginTool {
     onError?.(-100); // 通用错误码
   }
 
+  saveLoginInfo(info) {
+
+    // if (!info.accessToken || !info.expiresIn || !info.refreshToken) {
+    //   console.error("Invalid login info");
+    //   return;
+    // }
+
+    localStorage.setItem("AccessToken", info.accessToken);
+    localStorage.setItem("ExpiresIn", info.expiresIn);
+    localStorage.setItem("RefreshToken", info.refreshToken);
+  }
+
+
+
 }
 
 // 导出单例（默认 baseURL 为 '/'）
