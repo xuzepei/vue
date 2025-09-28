@@ -72,7 +72,8 @@ class UrlConfig {
         }
 
         const key = `api_host_url_${region}`;
-        window.sessionStorage.setItem(key, JSON.stringify(dict));
+        localStorage.setItem(key, JSON.stringify(dict));
+        //window.sessionStorage.setItem(key, JSON.stringify(dict));
     }
 
     getAPIHostUrlByRegion() {
@@ -81,7 +82,8 @@ class UrlConfig {
             return null;
         }
         const key = `api_host_url_${region}`;
-        const data = window.sessionStorage.getItem(key);
+        //const data = window.sessionStorage.getItem(key);
+        const data = localStorage.getItem(key);
         if (data) {
             const dict = JSON.parse(data);
             if (!dict) {
@@ -117,6 +119,16 @@ class UrlConfig {
         const host = this.getAPIHostByKey(key);
         if (host) {
             return host + "/token";
+        }
+
+        return "";
+    }
+
+    refreshUserTokenUrl() {
+        const key="corehost";
+        const host = this.getAPIHostByKey(key);
+        if (host) {
+            return host + "/connect/token";
         }
 
         return "";

@@ -7,6 +7,8 @@ import PortraitMatting from '@/components/PortraitMatting.vue'
 import HelloWorld from '@/components/HelloWorld.vue'
 import Dashboard from '@/components/Dashboard.vue'
 import Cases from '@/components/Cases.vue'
+import Keys from '@/plugins/keys.js';
+import { loginToolShared } from './plugins/LoginTool'
 
 Vue.use(Router)
 
@@ -35,36 +37,62 @@ const router = new Router({
     ]
 })
 
+// Token已经刷新过
+let tokenRefreshed = false
+
 //路由守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
 
     console.log("Check if it is logged in...")
 
     let isLoggedIn = true
-    const accessToken = localStorage.getItem("AccessToken") //window.sessionStorage.getItem("AccessToken")
+    const accessToken = localStorage.getItem(Keys.access_token) //window.sessionStorage.getItem("AccessToken")
     if (!accessToken) {
         isLoggedIn = false
-        console.log("isLoggedIn: " + isLoggedIn)
     } else {
         console.log("accessToken: " + accessToken)
     }
+
+    console.log("isLoggedIn: " + isLoggedIn)
 
     //要求登录的
     if (to.matched.some(record => record.meta.requireAuth)) {
         if (!isLoggedIn) {
             //未登录，则需要跳转到登录页
-            next({
-                path: "/login",
-                //query: { redirect: to.fullPath }
-            })
+            if (to.path !== '/login') {
+                console.log("router: " + "未登录，则需要跳转到登录页")
+                return next('/login')
+            } else {
+                console.log("router: " + "已经在登录页，直接放行")
+                return next() // 已经在登录页，直接放行
+            }
         } else {
-            //已登录，则继续访问
-            next()
+
+            // 如果是登录成功刚跳转来的，不刷新 Token
+            if (from.path === '/login' && !tokenRefreshed) {
+                tokenRefreshed = true
+                console.log("router: " + "如果是登录成功刚跳转来的，不刷新 Token")
+                return next()
+            }
+
+            // 其他情况：未刷新过 Token 则刷新
+            if (!tokenRefreshed) {
+                console.log("router: " + "其他情况：未刷新过 Token 则刷新")
+                try {
+                    await loginToolShared.refreshTokenAsync()
+                    tokenRefreshed = true
+                    return next() // 继续导航
+                } catch (e) {
+                    console.error("Token refresh failed:", e)
+                    return next('/login')
+                }
+            }
+
+            return next()
         }
-    } else {
-        //不需要登录的页面，直接访问
-        next()
     }
+
+    return next()
 })
 
 

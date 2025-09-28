@@ -2,7 +2,7 @@
     <el-container>
         <el-header>
             <h1 :style="{ color: '#ffffff' }">{{ title }}</h1>
-            <el-button class="logout-btn" type="text" @click="logout">退出</el-button>
+            <el-button class="logout-btn" type="text" @click="logout">Logout</el-button>
         </el-header>
         <el-container>
             <el-aside :width="asideWidth">
@@ -75,65 +75,65 @@
     border-right: 0.5px solid #000000;
 }
 
-.aside-menu:not(.el-menu--collapse) {
-    //width: 240px;
-    //min-height: 800px;
-}
+// .aside-menu:not(.el-menu--collapse) {
+//     //width: 240px;
+//     //min-height: 800px;
+// }
 
-.el-menu {
-    margin-top: 10px;
-    border-right: none;
-}
+// .el-menu {
+//     margin-top: 10px;
+//     border-right: none;
+// }
 
-.el-menu-item-group {
-    margin-top: -10px;
-    margin-bottom: 0px;
-    line-height: 40px;
-    height: 40px;
-}
+// .el-menu-item-group {
+//     margin-top: -10px;
+//     margin-bottom: 0px;
+//     line-height: 40px;
+//     height: 40px;
+// }
 
 
-/deep/.el-menu-item {
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    border-radius: 30px;
-    line-height: 40px;
-    height: 40px;
-    user-select: none;
-}
+// /deep/.el-menu-item {
+//     margin-top: 20px;
+//     margin-left: 10px;
+//     margin-right: 10px;
+//     border-radius: 30px;
+//     line-height: 40px;
+//     height: 40px;
+//     user-select: none;
+// }
 
-//有submenu的情况,折叠行
-/deep/.el-submenu__title {
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-    border-radius: 30px;
-    line-height: 40px;
-    height: 40px;
-    user-select: none;
-}
+// //有submenu的情况,折叠行
+// /deep/.el-submenu__title {
+//     margin-top: 20px;
+//     margin-left: 10px;
+//     margin-right: 10px;
+//     border-radius: 30px;
+//     line-height: 40px;
+//     height: 40px;
+//     user-select: none;
+// }
 
-//hover时
-/deep/.el-submenu__title:hover,
-/deep/.el-menu-item:hover {
-    background-color: var(--hover-color) !important;
-    /* 背景颜色 */
-    color: var(--dark-color);
-    /* 文字颜色 */
-}
+// //hover时
+// /deep/.el-submenu__title:hover,
+// /deep/.el-menu-item:hover {
+//     background-color: var(--hover-color) !important;
+//     /* 背景颜色 */
+//     color: var(--dark-color);
+//     /* 文字颜色 */
+// }
 
-//选中时
-/deep/.el-menu-item.is-active {
-    color: var(--dark-color);
-    background-color: var(--selected-color) !important;
-}
+// //选中时
+// /deep/.el-menu-item.is-active {
+//     color: var(--dark-color);
+//     background-color: var(--selected-color) !important;
+// }
 
 //子菜单展开后的二级菜单项
-.el-menu-item.for-level2 {
-    line-height: 40px;
-    height: 40px;
-}
+// .el-menu-item.for-level2 {
+//     line-height: 40px;
+//     height: 40px;
+// }
 
 // .custom-submenu .el-menu-item {
 //     margin-bottom: 0px;
@@ -150,31 +150,31 @@
     // gap: 10px;
 }
 
-.menu-item i {
-    /* 防止文字换行 */
-    //white-space: nowrap;
-    color: var(--dark-color);
-    font-size: 25px;
-}
+// .menu-item i {
+//     /* 防止文字换行 */
+//     //white-space: nowrap;
+//     color: var(--dark-color);
+//     font-size: 25px;
+// }
 
-.menu-item span {
-    /* 防止文字换行 */
-    //white-space: nowrap;
-    // color: white;
-    font-size: 18px;
-    margin-left: 5px;
-    //white-space: normal; // 允许换行显示
-    word-break: break-all; // 英文单词允许拆分显示
-    line-height: normal; // 调整行高
-}
+// .menu-item span {
+//     /* 防止文字换行 */
+//     //white-space: nowrap;
+//     // color: white;
+//     font-size: 18px;
+//     margin-left: 5px;
+//     //white-space: normal; // 允许换行显示
+//     word-break: break-all; // 英文单词允许拆分显示
+//     line-height: normal; // 调整行高
+// }
 
-.submenu-item span {
-    // color: var(--dark-color);
-    font-size: 18px;
-    //white-space: normal; // 允许换行显示
-    word-break: break-all; // 英文单词允许拆分显示
-    line-height: normal; // 调整行高
-}
+// .submenu-item span {
+//     // color: var(--dark-color);
+//     font-size: 18px;
+//     //white-space: normal; // 允许换行显示
+//     word-break: break-all; // 英文单词允许拆分显示
+//     line-height: normal; // 调整行高
+// }
 
 .collapse-btn {
     position: absolute;
@@ -188,6 +188,8 @@
 </style>
 
 <script>
+import { userShared } from '@/plugins/User';
+
 
 export default {
     mounted() {
@@ -229,7 +231,7 @@ export default {
             ],
             activeIndex: "/dashboard", // 默认激活的菜单项
             isCollapse: false, //侧边栏是否收起
-            asideWidth: "250px",
+            asideWidth: "240px",
         };
     },
     computed: {
@@ -262,13 +264,12 @@ export default {
         },
 
         logout() {
-            console.log("logout");
-            //清空token相关记录
-            window.sessionStorage.clear();
+            
+            //清除登录信息
+            userShared.logout();
+
             //跳转到登录页
             this.$router.push('/login');
-
-
         },
 
         scrollToBottom() {

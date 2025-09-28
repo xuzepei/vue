@@ -113,7 +113,7 @@ export default {
 
         login() { 
 
-            if (this.$isClickable() === false) {
+            if (this.$tool.isClickable() === false) {
                 console.log("Not clickable!!!");
                 return false;
             }

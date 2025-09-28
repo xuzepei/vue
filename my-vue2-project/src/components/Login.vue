@@ -161,8 +161,8 @@
 
 // hover状态颜色
 .el-select-dropdown__item:hover {
-  background-color: #fff9c4 !important;
-  color: #000 !important;
+    background-color: #fff9c4 !important;
+    color: #000 !important;
 }
 
 .buttons {
@@ -183,9 +183,9 @@
     margin-bottom: 20px;
     flex-direction: row;
     align-items: center;
-    cursor:pointer;
-    
-    
+    cursor: pointer;
+
+
     img {
         width: 24px;
         height: 24px;
@@ -200,18 +200,17 @@
 }
 
 .tip-content {
-  display: flex;
-  align-items: top;
-  line-height: 1.4;
+    display: flex;
+    align-items: top;
+    line-height: 1.4;
 }
 
 /* 图标样式 */
 .tip-icon {
-  font-size: 20px;
-  color: var(--tip-blue);
-  margin-right: 6px;
+    font-size: 20px;
+    color: var(--tip-blue);
+    margin-right: 6px;
 }
-
 </style>
 
 <!-- 非 scoped 的样式，全局生效 -->
@@ -223,15 +222,16 @@
 .icon-mima {
     margin-left: 3px;
 }
-
 </style>
 
 <script>
 
-import { loginToolShared } from "@/plugins/login.js";
-import Errors from "@/plugins/errors.js";
+import { loginToolShared } from "@/plugins/LoginTool.js";
+import Errors from "@/plugins/Errors.js";
 import { urlConfigShared } from '@/plugins/UrlConfig.js';
 import { userShared } from '@/plugins/User.js';
+import Keys from '@/plugins/keys.js';
+import Tool from '@/plugins/tool.js';
 
 export default {
     mounted() {
@@ -240,15 +240,15 @@ export default {
         //初始化区域选择
         this.region = userShared.getRegion();
         if (this.region) {
-            //this.onRegionChange(this.region);
+            this.onRegionChange(this.region);
         }
     },
     data() {
         return {
             //登录表单数据绑定对象
             loginFormData: {
-                username: this.$isDev() ? "" : "",
-                password: this.$isDev() ? "" : "",
+                username: this.$tool.isDev() ? "" : "",
+                password: this.$tool.isDev() ? "" : "",
             },
             loginFormRules: {
                 username: [
@@ -261,7 +261,7 @@ export default {
                     { min: 6, max: 15, message: "长度在6到15个字符", trigger: 'change' },
                 ],
             },
-            regionOptions: [{label: "Mainland China", value: "cn"}, {label: "Europe", value: "eu"}, {label: "India", value: "in"}, {label: "Global", value: "en"}],
+            regionOptions: [{ label: "Mainland China", value: "cn" }, { label: "Europe", value: "eu" }, { label: "India", value: "in" }, { label: "Global", value: "en" }],
             region: "",
             isRequesting: false,
             tokenInfo: null,
@@ -280,7 +280,7 @@ export default {
             console.log("validateUsername: value:" + value);
 
             //判断是否为开发环境
-            if (this.$isDev()) {
+            if (this.$tool.isDev()) {
                 callback();
             } else {
                 if (!this.$regex.email.test(value)) {
@@ -309,130 +309,149 @@ export default {
             } finally {
                 this.requestingHostUrl = false;
             }
-            
+
         },
 
-        login() {
+        // login() {
 
-            const onSuccess = (tokenInfo) => {
+        //     const onSuccess = (tokenInfo) => {
 
-                this.isRequesting = false;
+        //         this.isRequesting = false;
 
-                this.tokenInfo = tokenInfo;
-                loginToolShared.saveLoginInfo(tokenInfo)
+        //         this.tokenInfo = tokenInfo;
+        //         userShared.saveLoginInfo(tokenInfo)
+        //         const accessToken = localStorage.getItem(Keys.access_token)
+        //         console.log("AccessToken: " + accessToken);
 
+        //         const msg = "Login succeeded!";
+        //         console.log(msg);
+        //         this.$message.success(msg);
+        //         this.$router.push("/");
+        //     };
 
-                const msg = "Login succeeded!";
-                console.log(msg);
-                this.$message.success(msg);
-                this.$router.push("/");
-            };
+        //     const onError = (errorCode) => {
 
-            const onError = (errorCode) => {
+        //         this.isRequesting = false;
 
-                this.isRequesting = false;
+        //         const error = Errors.getLoginError(errorCode);
+        //         console.error("Login failed: ", error);
+        //         this.$message.error("Login failed: " + error);
+        //     };
 
-                const error = Errors.getLoginError(errorCode);
-                console.error("Login failed: ", error);
-                this.$message.error("Login failed: " + error);
-            };
+        //     //防止重复点击
+        //     if (this.$tool.isClickable() === false) {
+        //         console.log("Not clickable!!!");
+        //         return false;
+        //     }
 
-            //防止重复点击
-            if (this.$isClickable() === false) {
+        //     //等待请求HostUrl完成
+        //     if (this.requestingHostUrl) {
+        //         this.$message.warning('Still requesting host URL, please wait a moment!');
+        //         return;
+        //     }
+
+        //     //检查是否选择了区域
+        //     if (!this.region) {
+        //         this.$message.warning('Please select an operational region first!')
+        //         return
+        //     }
+
+        //     this.$refs.loginFormRef.validate((valid) => {
+        //         console.log("valid:" + valid);
+
+        //         if (valid) {
+
+        //             if (this.isRequesting) {
+        //                 console.log("Already requesting, please wait...");
+        //                 return false;
+        //             }
+
+        //             this.isRequesting = true;
+
+        //             loginToolShared.login(
+        //                 this.loginFormData.username,
+        //                 this.loginFormData.password,
+        //                 null,
+        //                 1,
+        //                 onSuccess,
+        //                 onError,
+        //             )
+
+        //             return true;
+        //         } else {
+        //             console.log("error submit!!");
+        //             return false;
+        //         }
+        //     });
+        // },
+
+        async login() {
+            // 防止重复点击
+            if (this.$tool.isClickable() === false) {
                 console.log("Not clickable!!!");
                 return false;
             }
 
-            //等待请求HostUrl完成
+            // 等待请求HostUrl完成
             if (this.requestingHostUrl) {
                 this.$message.warning('Still requesting host URL, please wait a moment!');
                 return;
             }
 
-            //检查是否选择了区域
+            // 检查是否选择了区域
             if (!this.region) {
                 this.$message.warning('Please select an operational region first!')
-                return
+                return;
             }
 
-            this.$refs.loginFormRef.validate((valid) => {
+            this.$refs.loginFormRef.validate(async (valid) => {
                 console.log("valid:" + valid);
 
-                if (valid) {
-
-                    if (this.isRequesting) {
-                        console.log("Already requesting, please wait...");
-                        return false;
-                    }
-
-                    this.isRequesting = true;
-
-                    loginToolShared.login(
-                        this.loginFormData.username,
-                        this.loginFormData.password,
-                        null,
-                        1,
-                        onSuccess,
-                        onError,
-                    )
-
-                    return true;
-                } else {
+                if (!valid) {
                     console.log("error submit!!");
                     return false;
                 }
-            });
-        },
 
-        async request() {
-            this.isRequesting = true;
-
-            try {
-                // 使用 this.$http 调用
-                const response = await this.$http.post('/token', this.loginFormData);
-
-                console.log("response.statue:" + response.status);
-                this.isRequesting = false;
-
-                if (response.status === 200) {
-                    const contentType = response.headers['content-type'];
-                    if (contentType && contentType.includes('application/json')) {
-
-                        console.log(response.data);
-
-                        if (response.data.success === true) {
-                            if (response.data.data != null) {
-                                this.tokenInfo = response.data.data;
-                                window.sessionStorage.setItem("AccessToken", this.tokenInfo.AccessToken);
-                                window.sessionStorage.setItem("ExpiresIn", this.tokenInfo.ExpiresIn);
-                                window.sessionStorage.setItem("RefreshToken", this.tokenInfo.RefreshToken);
-
-                                const msg = "Login succeeded!";
-
-                                console.log(msg);
-                                this.$message.success(msg);
-                                this.$router.push("/");
-                                return;
-                            }
-                        } else {
-                            console.log("errorCode: " + response.data.errorCode);
-                            console.log("errorMessage: " + response.data.errorMessage);
-                        }
-                    }
+                if (this.isRequesting) {
+                    console.log("Already requesting, please wait...");
+                    return false;
                 }
 
-                const msg = 'Failed to login';
-                console.error(msg);
-                this.$message.error(msg);
+                this.isRequesting = true;
 
+                try {
+                    // ✅ 使用 async/await 调用
+                    const tokenInfo = await loginToolShared.loginAsync(
+                        this.loginFormData.username,
+                        this.loginFormData.password,
+                        null,
+                        1
+                    );
 
-            } catch (e) {
-                console.error(e);
-                this.$message.error(e);
-            } finally {
-                this.isRequesting = false;
-            }
-        },
+                    this.isRequesting = false;
+
+                    this.tokenInfo = tokenInfo;
+                    userShared.saveLoginInfo(tokenInfo);
+
+                    const accessToken = localStorage.getItem(Keys.access_token);
+                    console.log("AccessToken: " + accessToken);
+
+                    const msg = "Login succeeded!";
+                    console.log(msg);
+                    this.$message.success(msg);
+
+                    this.$router.push("/");
+                } catch (err) {
+                    this.isRequesting = false;
+
+                    const error = Errors.getLoginError(err?.code || err);
+                    console.error("Login failed: ", error);
+                    this.$message.error("Login failed: " + error);
+                }
+
+                return true;
+            });
+        }
     }
 }
 </script>
