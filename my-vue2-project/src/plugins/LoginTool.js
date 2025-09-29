@@ -15,104 +15,104 @@ class LoginTool {
     });
   }
 
-  async login(username, password, captcha, mode, onSuccess, onError) {
+  // async login(username, password, captcha, mode, onSuccess, onError) {
 
-    try {
+  //   try {
 
-      var dataBody = {}
-      dataBody.username = username;
-      if (password) {
-        dataBody.password = password;
-      } else if (captcha) {
-        dataBody.code = captcha;
-      }
-      dataBody.loginModule = mode;
-      console.log("dataBody: " + JSON.stringify(dataBody, null, 2));
+  //     var dataBody = {}
+  //     dataBody.username = username;
+  //     if (password) {
+  //       dataBody.password = password;
+  //     } else if (captcha) {
+  //       dataBody.code = captcha;
+  //     }
+  //     dataBody.loginModule = mode;
+  //     console.log("dataBody: " + JSON.stringify(dataBody, null, 2));
 
-      const urlString = urlConfigShared.userTokenUrl();
-      console.log("urlString: " + urlString);
+  //     const urlString = urlConfigShared.userTokenUrl();
+  //     console.log("urlString: " + urlString);
 
-      const response = await this.http.post(encodeURI(urlString), dataBody);
-      console.log("response.statue: " + response.status);
+  //     const response = await this.http.post(encodeURI(urlString), dataBody);
+  //     console.log("response.statue: " + response.status);
 
-      if (
-        response.status === 200 &&
-        response.headers['content-type']?.includes('application/json') &&
-        response.data.success &&
-        response.data.data
-      ) {
-        const dict = response.data.data;
-        console.log(JSON.stringify(dict, null, 2));
+  //     if (
+  //       response.status === 200 &&
+  //       response.headers['content-type']?.includes('application/json') &&
+  //       response.data.success &&
+  //       response.data.data
+  //     ) {
+  //       const dict = response.data.data;
+  //       console.log(JSON.stringify(dict, null, 2));
 
-        if (dict.code === 0) {
-          onSuccess?.(dict.content);
-        } else {
-          if (dict.code === -5) {
-            this.login(username, password, captcha, 0, onSuccess, onError);
-          } else if (dict.code === -7) {
-            onError?.(-7); // 用户名密码错误
-          } else {
-            onError?.(dict.code);
-          }
-        }
+  //       if (dict.code === 0) {
+  //         onSuccess?.(dict.content);
+  //       } else {
+  //         if (dict.code === -5) {
+  //           this.login(username, password, captcha, 0, onSuccess, onError);
+  //         } else if (dict.code === -7) {
+  //           onError?.(-7); // 用户名密码错误
+  //         } else {
+  //           onError?.(dict.code);
+  //         }
+  //       }
 
-        return;
-      }
+  //       return;
+  //     }
 
-      console.error(response.data.errorMessage);
+  //     console.error(response.data.errorMessage);
 
-    } catch (err) {
-      console.error(err);
-    }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
 
-    onError?.(-100); // 通用错误码
-  }
+  //   onError?.(-100); // 通用错误码
+  // }
 
-  async refreshToken(onResult) {
+  // async refreshToken(onResult) {
 
-    const refresh_token = localStorage.getItem(Keys.refresh_token);
-    if (!refresh_token) {
-      onResult?.(false);
-      return;
-    }
+  //   const refresh_token = localStorage.getItem(Keys.refresh_token);
+  //   if (!refresh_token) {
+  //     onResult?.(false);
+  //     return;
+  //   }
 
-    try {
+  //   try {
 
-      let bodyString = `client_id=mobile&client_secret=secret&grant_type=refresh_token&login_module=1&refresh_token=${encodeURIComponent(refresh_token)}`;
+  //     let bodyString = `client_id=mobile&client_secret=secret&grant_type=refresh_token&login_module=1&refresh_token=${encodeURIComponent(refresh_token)}`;
 
-      const urlString = urlConfigShared.refreshUserTokenUrl();
-      console.log("urlString: " + urlString);
+  //     const urlString = urlConfigShared.refreshUserTokenUrl();
+  //     console.log("urlString: " + urlString);
 
-      const response = await this.http.post(encodeURI(urlString), bodyString, {
-        headers: {
-          'Authorization': userShared.authorization(),
-          "Accept": "*/*",
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      console.log("response.statue: " + response.status);
+  //     const response = await this.http.post(encodeURI(urlString), bodyString, {
+  //       headers: {
+  //         'Authorization': userShared.authorization(),
+  //         "Accept": "*/*",
+  //         'Content-Type': 'application/x-www-form-urlencoded'
+  //       }
+  //     });
+  //     console.log("response.statue: " + response.status);
 
-      if (
-        response.status === 200 &&
-        response.headers['content-type']?.includes('application/json') &&
-        response.data.success &&
-        response.data.data
-      ) {
-        const dict = response.data.data;
-        console.log(JSON.stringify(dict, null, 2));
+  //     if (
+  //       response.status === 200 &&
+  //       response.headers['content-type']?.includes('application/json') &&
+  //       response.data.success &&
+  //       response.data.data
+  //     ) {
+  //       const dict = response.data.data;
+  //       console.log(JSON.stringify(dict, null, 2));
 
-        onResult?.(true);
-        return;
-      }
+  //       onResult?.(true);
+  //       return;
+  //     }
 
-      console.error(response.data.errorMessage);
+  //     console.error(response.data.errorMessage);
 
-    } catch (err) {
-      console.error(err);
-    }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
 
-    onResult?.(false);
-  }
+  //   onResult?.(false);
+  // }
 
 
   //Promise + async/await
@@ -165,7 +165,7 @@ class LoginTool {
     try {
       const bodyString = `client_id=mobile&client_secret=secret&grant_type=refresh_token&login_module=1&refresh_token=${encodeURIComponent(refresh_token)}`;
       const urlString = urlConfigShared.refreshUserTokenUrl();
-      console.log("refresh url:", urlString);
+      console.log("urlString:", urlString);
 
       const response = await this.http.post(encodeURI(urlString), bodyString, {
         headers: {
@@ -175,13 +175,14 @@ class LoginTool {
         }
       });
 
+      console.log("#### refresh response:", response);
+
       if (
         response.status === 200 &&
         response.headers['content-type']?.includes('application/json') &&
-        response.data.success &&
-        response.data.data
+        response.data
       ) {
-        const dict = response.data.data;
+        const dict = response.data;
         console.log("token refreshed:", dict);
         return dict; // 返回新 token 数据
       }

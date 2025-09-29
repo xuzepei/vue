@@ -28,26 +28,25 @@ class UrlConfig {
             return;
         }
 
+        console.log("#### Fetch API host URL for region: " + userShared.getRegion());
+
         const urlString = this.getBaseUrl() + "/common/services";
+        console.log("urlString: " + urlString);
 
         try {
             // 使用 this.$http 调用
             const response = await axiosInstance.get(urlString);
 
-            console.log("response.statue: " + response.status);
+            console.log("#### API host response: ", response);
 
             if (response.status === 200) {
 
                 const contentType = response.headers['content-type'];
                 if (contentType && contentType.includes('application/json')) {
 
-                    console.log(response.data);
-
                     if (response.data.success === true && response.data.data != null) {
-                        console.log("response.data.data: " + response.data.data);
-                        // 保存API host URL到sessionStorage
+                        // 保存API host URL到localStorage
                         this.saveAPIHostUrlByRegion(response.data.data);
-                        
                         return;
                     } else {
                         console.log("errorCode: " + response.data.errorCode);

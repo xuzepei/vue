@@ -433,9 +433,6 @@ export default {
                     this.tokenInfo = tokenInfo;
                     userShared.saveLoginInfo(tokenInfo);
 
-                    const accessToken = localStorage.getItem(Keys.access_token);
-                    console.log("AccessToken: " + accessToken);
-
                     const msg = "Login succeeded!";
                     console.log(msg);
                     this.$message.success(msg);

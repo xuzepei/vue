@@ -42,6 +42,23 @@ class User {
     localStorage.setItem(Keys.refresh_token, refreshToken);
   }
 
+   upateTokenInfoByRefreshing(info) {
+    console.log("upateTokenInfoByRefreshing: " + JSON.stringify(info, null, 2));
+
+    const accessToken = Tool.getValueIgnoreCase(info, "access_token");
+    const expiresIn = Tool.getValueIgnoreCase(info, "expires_in");
+    const refreshToken = Tool.getValueIgnoreCase(info, "refresh_token");
+
+    if (!accessToken || !expiresIn || !refreshToken) {
+      console.error("Invalid token info");
+      return;
+    }
+
+    localStorage.setItem(Keys.access_token, accessToken);
+    localStorage.setItem(Keys.expires_in, expiresIn);
+    localStorage.setItem(Keys.refresh_token, refreshToken);
+  }
+
   logout() {
     localStorage.removeItem(Keys.access_token);
     localStorage.removeItem(Keys.expires_in);

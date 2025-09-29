@@ -9,6 +9,7 @@ import Dashboard from '@/components/Dashboard.vue'
 import Cases from '@/components/Cases.vue'
 import Keys from '@/plugins/keys.js';
 import { loginToolShared } from './plugins/LoginTool'
+import { userShared } from './plugins/User'
 
 Vue.use(Router)
 
@@ -79,7 +80,9 @@ router.beforeEach(async (to, from, next) => {
             if (!tokenRefreshed) {
                 console.log("router: " + "其他情况：未刷新过 Token 则刷新")
                 try {
-                    await loginToolShared.refreshTokenAsync()
+                    const tokenInfo = await loginToolShared.refreshTokenAsync()
+                    userShared.upateTokenInfoByRefreshing(tokenInfo)
+
                     tokenRefreshed = true
                     return next() // 继续导航
                 } catch (e) {
