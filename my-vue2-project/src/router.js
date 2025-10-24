@@ -87,6 +87,10 @@ router.beforeEach(async (to, from, next) => {
                     return next() // 继续导航
                 } catch (e) {
                     console.error("Token refresh failed:", e)
+
+                    //清除登录信息
+                    userShared.logout();
+
                     return next('/login')
                 }
             }
