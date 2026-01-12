@@ -1,11 +1,30 @@
-<script setup></script>
+<script>
+
+export default {
+  data() {
+    return {
+      message: "Hello Vue 3!",
+      titleClassName: "main-title",
+    }
+  },
+}
+
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <h1 :class=titleClassName>{{ message }}</h1>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+.main-title {
+  color: #42b983;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: 1.5;
+  font-size: 48px;
+  text-align: center;
+  margin-top: 40vh;
+}
+
+</style>
