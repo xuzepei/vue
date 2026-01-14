@@ -1,0 +1,38 @@
+
+.my-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+
+  margin-right: 15px;
+  flex-shrink: 0;
+  /* 防止复选框被挤压变形 */
+
+  &:hover {
+    border-color: var(--primary-color);
+    background-color: var(--hover-color); // 之前定义的浅色变量
+  }
+
+  &:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+
+    &::after {
+      content: '';
+      width: 6px; // 稍微调窄一点点，对勾比例更好看
+      height: 11px; // 稍微调短一点点
+      border: solid white;
+      border-width: 0 2.5px 2.5px 0;
+      // 同时进行旋转和位置微调（Y轴向上平移 1px 通常能解决视觉重心偏下的问题）
+      transform: rotate(45deg) translateY(-1px);
+    }
+  }
+}

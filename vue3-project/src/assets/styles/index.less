@@ -1,0 +1,49 @@
+@import "./variables.less"; // 引入变量
+@import "./common.less"; // 引入公共类和组件样式
+
+// 盒子模型重置
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+// 基础布局样式
+html,
+body,
+#app {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: white; // 使用 Less 变量
+}
+
+// Element Plus 按钮样式定制 (利用嵌套)
+.my-el-button {
+  // 继承/组合 Element Button 的基础结构，并覆盖特定样式
+  &.el-button {
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    transition: all 0.3s !important;
+    border: none !important;
+    color: var(--white-color) !important;
+
+    // 默认状态（即 Primary 风格的自定义版）
+    background: var(--primary-gradient) !important;
+    box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+
+    &:hover,
+    &:focus {
+      background: var(--primary-gradient-hover) !important;
+      opacity: 0.9; // 增加一点交互感
+    }
+
+    &:active {
+      transform: scale(0.95); // 点击时略微缩小，增加打击感
+    }
+  }
+}
