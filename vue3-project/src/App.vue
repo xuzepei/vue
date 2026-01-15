@@ -1,10 +1,14 @@
 <script>
+import TestChildComp from '@/components/TestChildComp.vue'
+
 export default {
+  components: {
+    TestChildComp,
+  },
 
   mounted() {
     console.log(this.$refs.pElementRef)
   },
-
 
   data() {
     return {
@@ -49,11 +53,19 @@ export default {
     removeTodo(id) {
       this.todos = this.todos.filter((todo) => todo.id !== id)
     },
+    responseEventHandler(msg) {
+      console.log('Event received from child:', msg)
+    },
   },
 
   computed: {
     filteredTodos() {
       return this.todos.filter((todo) => !todo.done)
+    },
+  },
+  watch: {
+    inputText(newVal) {
+      console.log('Input text changed to:', newVal)
     },
   },
 }
@@ -62,6 +74,10 @@ export default {
 <template>
   <div class="container">
     <!-- <h1 :class="titleClassName" v-if="willShow">{{ message }} {{ count }}</h1> -->
+
+    <TestChildComp :msg="inputText" @response="responseEventHandler">Message: {{ message }} from Parent Component
+    </TestChildComp>
+
     <h1 :class="[titleClassName, { 'is-hidden': !willShow }]">{{ message }} {{ count }}</h1>
     <button class="button1" @click="increase">Click Me</button>
     <input v-model="inputText" placeholder="Edit message" />
