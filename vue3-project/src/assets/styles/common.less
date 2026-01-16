@@ -1,4 +1,3 @@
-
 .my-checkbox {
   appearance: none;
   -webkit-appearance: none;
@@ -34,5 +33,19 @@
       // 同时进行旋转和位置微调（Y轴向上平移 1px 通常能解决视觉重心偏下的问题）
       transform: rotate(45deg) translateY(-1px);
     }
+  }
+}
+
+/* 全局样式文件不需要 :deep */
+.my-el-tooltip {
+  background: var(--tip-blue) !important; /* 背景色 */
+  color: #ffffff !important;      /* 文字颜色 */
+  border: none !important;        /* 去掉边框 */
+  box-shadow: none !important;    /* 建议去掉阴影或统一颜色 */
+
+  /* 箭头部分：它是 .el-popper 的子元素 */
+  .el-popper__arrow::before {
+    background: var(--tip-blue) !important;
+    border: none !important;
   }
 }
