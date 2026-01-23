@@ -15,10 +15,15 @@ import hljsVuePlugin from "@highlightjs/vue-plugin"
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
+// 引入工具类
+import Tool from '@/utils/tool'
+
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(hljsVuePlugin)
 app.use(ElementPlus)
+
+app.config.globalProperties.$tool = Tool
 
 app.mount('#app')

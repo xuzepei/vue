@@ -9,8 +9,7 @@ export default {
     msg: String,
   },
 
-  mounted() {
-  },
+  mounted() {},
 
   methods: {
     handleClick() {
@@ -25,11 +24,22 @@ export default {
 </script>
 
 <template>
-  <h1>Test Child Component</h1>
-  <div>This is a message from parent: {{ msg }}</div>
-  <button @click="handleClick">Click to Emit Event</button>
+  <div class="container2">
+    <h1>Test Child Component</h1>
+    <div>This is a message from parent: {{ msg }}</div>
+    <button @click="handleClick">Click to Emit Event</button>
 
-  <slot>Fallback content</slot>
+    <p>
+      <slot>Fallback content</slot>
+    </p>
 
-  <button @click="handleClick2">Congratulations!</button>
+
+    <button @click="handleClick2">Congratulations!</button>
+  </div>
 </template>
+
+<style lang="less" scoped>
+.container2 {
+  background-color: aquamarine;
+}
+</style>
