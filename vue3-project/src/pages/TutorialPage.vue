@@ -106,19 +106,19 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  display: flex;
   /* 开启 Flex 模式 */
-  flex-direction: column;
+  display: flex;
   /* 让子元素纵向排列 (如果不加，h1 和 button 会并排) */
-  justify-content: center;
+  flex-direction: column;
   /* 在主轴（垂直方向）上居中 */
-  align-items: center;
+  justify-content: center;
   /* 在交叉轴（水平方向）上居中 */
-
-  width: 100%;
+  align-items: center;
   /* 占满宽度 */
-  min-height: 100vh;
+  width: 100%;
   /* 可选：如果你想让内容相对于整个屏幕高度布局 */
+  min-height: 100vh;
+  /* 可选：子元素之间的间距 */
   gap: 20px;
 }
 

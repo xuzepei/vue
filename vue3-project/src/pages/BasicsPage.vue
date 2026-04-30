@@ -62,7 +62,7 @@ export default {
 
     onClickedLink(e) {
       console.log('onClickedLink')
-      alert('navigation was prevented.')
+      //alert('navigation was prevented.')
       //e.preventDefault()
     },
 
@@ -111,7 +111,7 @@ export default {
     </p>
     <p>
       <el-tooltip popper-class="my-el-tooltip" :content="message"
-        placement="top"><span>鼠标悬停试试</span></el-tooltip><span>鼠标悬停试试</span>
+        placement="top"><span>鼠标悬停试试</span></el-tooltip>
     </p>
     <p :class="{ red: isRed }" @click="toggleRed">
       This should be red... but click me to toggle it.
@@ -186,7 +186,7 @@ export default {
     <p>Selected: {{ selectedOption }}</p>
 
     <h4>Multi Select</h4>
-    <select v-model="multiSelected" multiple style="width: 200px;">
+    <select v-model="multiSelected" multiple style="width: 100px;">
       <option>A</option>
       <option>B</option>
       <option>C</option>

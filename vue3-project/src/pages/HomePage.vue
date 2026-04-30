@@ -6,7 +6,7 @@ export default {
   data() {
     return {
       title: '教程',
-      list: [{ label: '基础', page:"BasicsPage"},{ label: '实战',page:"PracticePage"},{ label: '互动教程',page:"TutorialPage"}],
+      list: [{ label: '基础', page:"BasicsPage"},{ label: '互动教程',page:"TutorialPage"},{ label: '实战',page:"PracticePage"}],
     }
   },
 
@@ -43,7 +43,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: top;
-  align-items: flex-start;
+  align-items: start;
   width: 100%;
   min-height: 100vh;
   gap: 0px;
