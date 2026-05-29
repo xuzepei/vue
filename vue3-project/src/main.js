@@ -5,7 +5,7 @@ import App from '@/App.vue'
 import router from '@/router'
 
 //导入全局样式表
-import '@/assets/styles/index.less'
+import '@/styles/index.less'
 
 //显示代码组件
 import 'highlight.js/styles/stackoverflow-light.css'
