@@ -1,8 +1,12 @@
 <script>
 export default {
   components: {},
+
+  // 生命周期钩子会在组件生命周期的各个不同阶段被调用
+  // 例如这个函数就会在组件挂载完成后被调用
   mounted() {},
 
+  // data() 返回的属性将会成为响应式的状态
   data() {
     return {
       title: '教程',
@@ -10,6 +14,8 @@ export default {
     }
   },
 
+  // methods 是一些用来更改状态与触发更新的函数
+  // 它们可以在模板中作为事件处理器绑定
   methods: {
     onClick(pageName) {
       console.log("#### clicked:" + pageName)
@@ -25,6 +31,7 @@ export default {
 
 <template>
   <div class="container">
+    <!-- 在双花括号中的内容并不只限于标识符或路径——我们可以使用任何有效的 JavaScript 表达式。 -->
     <h1>{{ title }}</h1>
     <div>
       <ul>
