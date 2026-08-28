@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '@/pages/HomePage.vue'
+import HomePageCopy from '@/pages/HomePageCopy.vue'
 import BasicsPage from '@/pages/BasicsPage.vue'
 import TutorialPage from '@/pages/TutorialPage.vue'
 import PracticePage from '@/pages/PracticePage.vue'

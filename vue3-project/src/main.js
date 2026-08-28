@@ -19,7 +19,7 @@ import 'element-plus/dist/index.css'
 import Tool from '@/utils/tool'
 
 const app = createApp(App)
-app.use(createPinia())
+app.use(createPinia()) //用于全局状态管理
 app.use(router)
 app.use(hljsVuePlugin)
 app.use(ElementPlus)
